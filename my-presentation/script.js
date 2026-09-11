@@ -1,6 +1,6 @@
 // ==========================================
 // PRESENTATION CLOUD WORKSPACE
-// FULL SCRIPT
+// STABLE FULL SCRIPT
 // ==========================================
 
 
@@ -16,11 +16,24 @@ const SUPABASE_KEY =
 
 let supabaseClient = null;
 
-if (window.supabase) {
-  supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+
+// Supabase tidak akan menghentikan app
+if (
+  window.supabase &&
+  typeof window.supabase.createClient === "function"
+) {
+  try {
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+  } catch (error) {
+    console.error(
+      "Supabase initialization error:",
+      error
+    );
+  }
 }
 
 
@@ -49,9 +62,13 @@ const defaultSlides = [
 // ==========================================
 
 let slides = [];
+
 let currentSlide = 0;
+
 let currentPresentationId = null;
+
 let isEditMode = true;
+
 let autoSaveTimer = null;
 
 
@@ -118,7 +135,7 @@ const savedPresentations =
 
 
 // ==========================================
-// PRESENTATION BUTTONS
+// PRESENTATION NAVIGATION
 // ==========================================
 
 const presentationNavigation =
@@ -168,7 +185,7 @@ function escapeHTML(text) {
 
 
 // ==========================================
-// REMOVE HTML
+// STRIP HTML
 // ==========================================
 
 function stripHTML(html) {
@@ -224,6 +241,7 @@ function loadLocalSlides() {
         "myPresentationSlides"
       );
 
+
     if (!saved) {
 
       slides =
@@ -234,10 +252,13 @@ function loadLocalSlides() {
         );
 
       return;
+
     }
+
 
     const parsed =
       JSON.parse(saved);
+
 
     if (
       !Array.isArray(parsed) ||
@@ -252,16 +273,19 @@ function loadLocalSlides() {
         );
 
       return;
+
     }
+
 
     slides = parsed;
 
   } catch (error) {
 
     console.error(
-      "Load error:",
+      "Local load error:",
       error
     );
+
 
     slides =
       JSON.parse(
@@ -284,7 +308,9 @@ function renderSlides() {
   if (!slideContainer)
     return;
 
+
   slideContainer.innerHTML = "";
+
 
   slides.forEach(
     (slide, index) => {
@@ -292,7 +318,10 @@ function renderSlides() {
       const slideElement =
         document.createElement("div");
 
-      slideElement.className = "slide";
+
+      slideElement.className =
+        "slide";
+
 
       if (
         index === currentSlide
@@ -304,12 +333,14 @@ function renderSlides() {
 
       }
 
+
       slideElement.dataset.index =
         index;
 
 
       const content =
         document.createElement("div");
+
 
       content.className =
         "slide-content";
@@ -320,11 +351,20 @@ function renderSlides() {
       const title =
         document.createElement("div");
 
+
       title.className =
         "slide-title";
 
+
       title.contentEditable =
-        isEditMode ? "true" : "false";
+        isEditMode
+          ? "true"
+          : "false";
+
+
+      title.spellcheck =
+        true;
+
 
       title.textContent =
         slide.title ||
@@ -336,24 +376,35 @@ function renderSlides() {
       const text =
         document.createElement("div");
 
+
       text.className =
         "slide-text";
 
+
       text.contentEditable =
-        isEditMode ? "true" : "false";
+        isEditMode
+          ? "true"
+          : "false";
+
+
+      text.spellcheck =
+        true;
+
 
       text.innerHTML =
-        slide.content || "";
+        slide.content ||
+        "";
 
 
-      // TITLE EDIT
+      // TITLE CHANGE
 
       title.addEventListener(
         "input",
-        () => {
+        function () {
 
           slides[index].title =
-            title.textContent;
+            this.textContent;
+
 
           saveLocalSlides();
 
@@ -365,14 +416,15 @@ function renderSlides() {
       );
 
 
-      // CONTENT EDIT
+      // CONTENT CHANGE
 
       text.addEventListener(
         "input",
-        () => {
+        function () {
 
           slides[index].content =
-            text.innerHTML;
+            this.innerHTML;
+
 
           saveLocalSlides();
 
@@ -385,6 +437,7 @@ function renderSlides() {
 
 
       content.appendChild(title);
+
       content.appendChild(text);
 
       slideElement.appendChild(content);
@@ -413,13 +466,19 @@ function renderThumbnails() {
   if (!slideThumbnails)
     return;
 
-  slideThumbnails.innerHTML = "";
+
+  slideThumbnails.innerHTML =
+    "";
+
 
   slides.forEach(
     (slide, index) => {
 
       const thumbnail =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       thumbnail.className =
         "slide-thumbnail";
@@ -467,7 +526,7 @@ function renderThumbnails() {
 
       thumbnail.addEventListener(
         "click",
-        () => {
+        function () {
 
           showSlide(index);
 
@@ -486,13 +545,14 @@ function renderThumbnails() {
 
 
 // ==========================================
-// UPDATE SLIDE UI
+// UPDATE UI
 // ==========================================
 
 function updateSlideUI() {
 
   const total =
-    slides.length;
+    slides.length || 1;
+
 
   const counter =
     `${currentSlide + 1} / ${total}`;
@@ -514,12 +574,10 @@ function updateSlideUI() {
   }
 
 
-  // NORMAL BUTTONS
-
   if (previousBtn) {
 
     previousBtn.disabled =
-      currentSlide === 0;
+      currentSlide <= 0;
 
   }
 
@@ -527,17 +585,18 @@ function updateSlideUI() {
   if (nextBtn) {
 
     nextBtn.disabled =
-      currentSlide === total - 1;
+      currentSlide >=
+      total - 1;
 
   }
 
 
-  // PRESENT BUTTONS
+  // Present arrows
 
   if (presentationPrevBtn) {
 
     presentationPrevBtn.disabled =
-      currentSlide === 0;
+      currentSlide <= 0;
 
   }
 
@@ -545,17 +604,16 @@ function updateSlideUI() {
   if (presentationNextBtn) {
 
     presentationNextBtn.disabled =
-      currentSlide === total - 1;
+      currentSlide >=
+      total - 1;
 
   }
 
 
-  // SLIDES
-
   document
     .querySelectorAll(".slide")
     .forEach(
-      (slide, index) => {
+      function (slide, index) {
 
         slide.classList.toggle(
           "active",
@@ -566,14 +624,12 @@ function updateSlideUI() {
     );
 
 
-  // THUMBNAILS
-
   document
     .querySelectorAll(
       ".slide-thumbnail"
     )
     .forEach(
-      (thumbnail, index) => {
+      function (thumbnail, index) {
 
         thumbnail.classList.toggle(
           "active",
@@ -593,6 +649,7 @@ function updateSlideUI() {
 function showSlide(index) {
 
   if (
+    !slides ||
     slides.length === 0
   ) {
 
@@ -620,6 +677,7 @@ function showSlide(index) {
 
   currentSlide =
     index;
+
 
   updateSlideUI();
 
@@ -653,8 +711,7 @@ function nextSlide() {
 function previousSlide() {
 
   if (
-    currentSlide >
-    0
+    currentSlide > 0
   ) {
 
     currentSlide--;
@@ -681,7 +738,7 @@ function setEditMode(enabled) {
       ".slide-title, .slide-text"
     )
     .forEach(
-      element => {
+      function (element) {
 
         element.contentEditable =
           enabled
@@ -719,7 +776,7 @@ if (editBtn) {
 
   editBtn.addEventListener(
     "click",
-    () => {
+    function () {
 
       setEditMode(
         !isEditMode
@@ -760,6 +817,9 @@ function addNewSlide() {
     "➕ Slide ditambah"
   );
 
+
+  scheduleAutoSave();
+
 }
 
 
@@ -791,7 +851,7 @@ if (deleteSlideBtn) {
 
   deleteSlideBtn.addEventListener(
     "click",
-    () => {
+    function () {
 
       if (
         slides.length <= 1
@@ -806,15 +866,14 @@ if (deleteSlideBtn) {
       }
 
 
-      if (
-        !confirm(
+      const answer =
+        confirm(
           `Padam Slide ${currentSlide + 1}?`
-        )
-      ) {
+        );
 
+
+      if (!answer)
         return;
-
-      }
 
 
       slides.splice(
@@ -824,7 +883,8 @@ if (deleteSlideBtn) {
 
 
       if (
-        currentSlide >= slides.length
+        currentSlide >=
+        slides.length
       ) {
 
         currentSlide =
@@ -840,6 +900,9 @@ if (deleteSlideBtn) {
       setStatus(
         "🗑️ Slide dipadam"
       );
+
+
+      scheduleAutoSave();
 
     }
   );
@@ -858,7 +921,7 @@ if (
 
   addImageBtn.addEventListener(
     "click",
-    () => {
+    function () {
 
       imageInput.click();
 
@@ -868,7 +931,7 @@ if (
 
   imageInput.addEventListener(
     "change",
-    event => {
+    function (event) {
 
       const file =
         event.target.files[0];
@@ -885,8 +948,11 @@ if (
       ) {
 
         alert(
-          "Sila pilih gambar."
+          "Sila pilih fail gambar."
         );
+
+        imageInput.value =
+          "";
 
         return;
 
@@ -898,7 +964,16 @@ if (
 
 
       reader.onload =
-        () => {
+        function () {
+
+          if (
+            !slides[currentSlide]
+          ) {
+
+            return;
+
+          }
+
 
           slides[currentSlide].content += `
 
@@ -909,7 +984,7 @@ if (
 
               <img
                 src="${reader.result}"
-                alt="Image"
+                alt="Presentation image"
                 style="
                   max-width:100%;
                   max-height:330px;
@@ -930,6 +1005,9 @@ if (
             "🖼️ Image ditambah"
           );
 
+
+          scheduleAutoSave();
+
         };
 
 
@@ -948,7 +1026,7 @@ if (
 
 
 // ==========================================
-// SAVE PRESENTATION
+// SAVE TO CLOUD
 // ==========================================
 
 async function savePresentation() {
@@ -959,7 +1037,7 @@ async function savePresentation() {
   if (!supabaseClient) {
 
     setStatus(
-      "⚠️ Supabase tidak tersedia"
+      "💾 Disimpan secara local"
     );
 
     return;
@@ -1034,23 +1112,26 @@ async function savePresentation() {
 
     loadCloudPresentations();
 
-
   } catch (error) {
 
     console.error(
-      "SAVE ERROR:",
+      "Cloud save error:",
       error
     );
 
 
     setStatus(
-      "❌ Save gagal"
+      "⚠️ Local save — Cloud gagal"
     );
 
   }
 
 }
 
+
+// ==========================================
+// SAVE BUTTON
+// ==========================================
 
 if (saveBtn) {
 
@@ -1075,7 +1156,7 @@ function scheduleAutoSave() {
 
   autoSaveTimer =
     setTimeout(
-      () => {
+      function () {
 
         if (
           currentPresentationId
@@ -1155,7 +1236,7 @@ async function loadCloudPresentations() {
 
 
     data.forEach(
-      presentation => {
+      function (presentation) {
 
         const card =
           document.createElement(
@@ -1188,15 +1269,18 @@ async function loadCloudPresentations() {
 
           <div>
 
-            <button class="open-cloud-btn">
+            <button
+              class="open-cloud-btn">
               📂 Buka
             </button>
 
-            <button class="edit-cloud-btn">
+            <button
+              class="edit-cloud-btn">
               ✏️ Edit
             </button>
 
-            <button class="delete-cloud-btn">
+            <button
+              class="delete-cloud-btn">
               🗑️ Padam
             </button>
 
@@ -1211,7 +1295,7 @@ async function loadCloudPresentations() {
           )
           .addEventListener(
             "click",
-            () => {
+            function () {
 
               openCloudPresentation(
                 presentation
@@ -1227,7 +1311,7 @@ async function loadCloudPresentations() {
           )
           .addEventListener(
             "click",
-            () => {
+            function () {
 
               editCloudPresentation(
                 presentation
@@ -1243,7 +1327,7 @@ async function loadCloudPresentations() {
           )
           .addEventListener(
             "click",
-            () => {
+            function () {
 
               deleteCloudPresentation(
                 presentation.id
@@ -1263,13 +1347,13 @@ async function loadCloudPresentations() {
   } catch (error) {
 
     console.error(
-      "CLOUD ERROR:",
+      "Cloud load error:",
       error
     );
 
 
     savedPresentations.innerHTML =
-      "❌ Gagal load Cloud";
+      "⚠️ Cloud tidak dapat dimuat.";
 
   }
 
@@ -1286,18 +1370,14 @@ function openCloudPresentation(
 
   try {
 
-    currentPresentationId =
-      presentation.id;
-
-
-    slides =
+    const parsed =
       JSON.parse(
         presentation.content
       );
 
 
     if (
-      !Array.isArray(slides)
+      !Array.isArray(parsed)
     ) {
 
       throw new Error(
@@ -1305,6 +1385,14 @@ function openCloudPresentation(
       );
 
     }
+
+
+    currentPresentationId =
+      presentation.id;
+
+
+    slides =
+      parsed;
 
 
     currentSlide =
@@ -1323,7 +1411,11 @@ function openCloudPresentation(
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Open error:",
+      error
+    );
+
 
     alert(
       "Gagal buka presentation."
@@ -1344,18 +1436,14 @@ function editCloudPresentation(
 
   try {
 
-    currentPresentationId =
-      presentation.id;
-
-
-    slides =
+    const parsed =
       JSON.parse(
         presentation.content
       );
 
 
     if (
-      !Array.isArray(slides)
+      !Array.isArray(parsed)
     ) {
 
       throw new Error(
@@ -1365,23 +1453,49 @@ function editCloudPresentation(
     }
 
 
+    currentPresentationId =
+      presentation.id;
+
+
+    slides =
+      parsed;
+
+
     currentSlide =
       0;
 
 
     saveLocalSlides();
 
+    renderSlides();
+
     setEditMode(true);
 
-    renderSlides();
 
     setStatus(
       "✏️ Presentation sedang diedit"
     );
 
+
+    if (editor) {
+
+      editor.scrollIntoView({
+        behavior:
+          "smooth",
+
+        block:
+          "start"
+      });
+
+    }
+
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Edit error:",
+      error
+    );
+
 
     alert(
       "Gagal edit presentation."
@@ -1400,11 +1514,17 @@ async function deleteCloudPresentation(
   id
 ) {
 
-  if (
-    !confirm(
+  const answer =
+    confirm(
       "Padam presentation ini dari Cloud?"
-    )
-  ) {
+    );
+
+
+  if (!answer)
+    return;
+
+
+  if (!supabaseClient) {
 
     return;
 
@@ -1454,7 +1574,11 @@ async function deleteCloudPresentation(
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Delete error:",
+      error
+    );
+
 
     alert(
       "Gagal padam presentation."
@@ -1466,14 +1590,14 @@ async function deleteCloudPresentation(
 
 
 // ==========================================
-// REFRESH
+// REFRESH CLOUD
 // ==========================================
 
 if (refreshCloudBtn) {
 
   refreshCloudBtn.addEventListener(
     "click",
-    () => {
+    function () {
 
       loadCloudPresentations();
 
@@ -1508,7 +1632,7 @@ if (nextBtn) {
 
 
 // ==========================================
-// PRESENT
+// PRESENTATION MODE
 // ==========================================
 
 function startPresentation() {
@@ -1518,19 +1642,7 @@ function startPresentation() {
   );
 
 
-  // Make sure arrows update immediately
-
   updateSlideUI();
-
-
-  // Force visibility in case another style hides it
-
-  if (presentationNavigation) {
-
-    presentationNavigation.style.display =
-      "flex";
-
-  }
 
 
   setStatus(
@@ -1540,23 +1652,11 @@ function startPresentation() {
 }
 
 
-// ==========================================
-// STOP PRESENT
-// ==========================================
-
 function stopPresentation() {
 
   document.body.classList.remove(
     "presentation-mode"
   );
-
-
-  if (presentationNavigation) {
-
-    presentationNavigation.style.display =
-      "none";
-
-  }
 
 
   setStatus(
@@ -1587,16 +1687,18 @@ if (stopBtn) {
 
 
 // ==========================================
-// PRESENT LEFT ARROW
+// PRESENTATION ←
 // ==========================================
 
 if (presentationPrevBtn) {
 
   presentationPrevBtn.addEventListener(
     "click",
-    event => {
+    function (event) {
 
       event.preventDefault();
+
+      event.stopPropagation();
 
       previousSlide();
 
@@ -1607,16 +1709,18 @@ if (presentationPrevBtn) {
 
 
 // ==========================================
-// PRESENT RIGHT ARROW
+// PRESENTATION →
 // ==========================================
 
 if (presentationNextBtn) {
 
   presentationNextBtn.addEventListener(
     "click",
-    event => {
+    function (event) {
 
       event.preventDefault();
+
+      event.stopPropagation();
 
       nextSlide();
 
@@ -1632,11 +1736,10 @@ if (presentationNextBtn) {
 
 document.addEventListener(
   "keydown",
-  event => {
+  function (event) {
 
     if (
-      event.key ===
-      "Escape"
+      event.key === "Escape"
     ) {
 
       stopPresentation();
@@ -1647,8 +1750,20 @@ document.addEventListener(
 
 
     if (
-      event.key ===
-      "ArrowRight"
+      event.target &&
+      event.target.isContentEditable &&
+      !document.body.classList.contains(
+        "presentation-mode"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      event.key === "ArrowRight"
     ) {
 
       nextSlide();
@@ -1657,8 +1772,7 @@ document.addEventListener(
 
 
     if (
-      event.key ===
-      "ArrowLeft"
+      event.key === "ArrowLeft"
     ) {
 
       previousSlide();
@@ -1702,13 +1816,9 @@ function formatDate(
     "ms-MY",
     {
       day: "2-digit",
-
       month: "short",
-
       year: "numeric",
-
       hour: "2-digit",
-
       minute: "2-digit"
     }
   );
@@ -1724,20 +1834,32 @@ function initialize() {
 
   loadLocalSlides();
 
-  currentSlide =
-    0;
+  currentSlide = 0;
 
   renderSlides();
 
   setEditMode(true);
 
-  loadCloudPresentations();
 
-  setStatus(
-    "Ready ✓"
-  );
+  if (supabaseClient) {
+
+    loadCloudPresentations();
+
+    setStatus(
+      "☁️ Cloud ready"
+    );
+
+  } else {
+
+    setStatus(
+      "💾 Local mode"
+    );
+
+  }
 
 }
 
+
+// START
 
 initialize();
