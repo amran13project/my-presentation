@@ -1,0 +1,854 @@
+/* =================================
+   RESET
+================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =================================
+   BODY
+================================= */
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #000000;
+
+    color:
+        white;
+
+    min-height:
+        100vh;
+
+    overflow-x:
+        hidden;
+
+}
+
+
+/* =================================
+   TOP BAR
+================================= */
+
+header {
+
+    height:
+        70px;
+
+    background:
+        #151515;
+
+    border-bottom:
+        1px solid #292929;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        0 25px;
+
+}
+
+
+/* =================================
+   LOGO
+================================= */
+
+.logo {
+
+    font-size:
+        20px;
+
+    font-weight:
+        bold;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+}
+
+
+.logo span {
+
+    font-size:
+        18px;
+
+}
+
+
+/* =================================
+   TOP BUTTONS
+================================= */
+
+.topButtons {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+}
+
+
+.topButtons button {
+
+    border:
+        none;
+
+    background:
+        #292929;
+
+    color:
+        white;
+
+    padding:
+        10px 14px;
+
+    border-radius:
+        8px;
+
+    cursor:
+        pointer;
+
+    font-size:
+        14px;
+
+    transition:
+        0.2s;
+
+}
+
+
+.topButtons button:hover {
+
+    background:
+        #3c3c3c;
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =================================
+   PRESENT BUTTON
+================================= */
+
+#presentBtn {
+
+    background:
+        white;
+
+    color:
+        #111111;
+
+    font-weight:
+        bold;
+
+}
+
+
+#presentBtn:hover {
+
+    background:
+        #eeeeee;
+
+    box-shadow:
+        0 0 20px rgba(255,255,255,0.3);
+
+}
+
+
+/* =================================
+   EDITOR
+================================= */
+
+#editor {
+
+    min-height:
+        calc(100vh - 140px);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        30px;
+
+}
+
+
+/* =================================
+   SLIDE CONTAINER
+================================= */
+
+#slideContainer {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+}
+
+
+/* =================================
+   SLIDE
+================================= */
+
+.slide {
+
+    display:
+        none;
+
+    width:
+        min(900px, 78vw);
+
+    aspect-ratio:
+        16 / 9;
+
+    background:
+        #ffffff;
+
+    color:
+        #111111;
+
+    border-radius:
+        18px;
+
+    padding:
+        70px;
+
+    position:
+        relative;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    text-align:
+        center;
+
+
+    /* PROFESSIONAL SHADOW */
+
+    box-shadow:
+
+        0 30px 70px
+        rgba(0,0,0,0.9),
+
+        0 0 30px
+        rgba(255,255,255,0.18),
+
+        0 0 90px
+        rgba(255,255,255,0.08);
+
+}
+
+
+.slide.active {
+
+    display:
+        flex;
+
+    animation:
+        slideIn 0.45s ease;
+
+}
+
+
+/* =================================
+   SLIDE CONTENT
+================================= */
+
+.slideContent {
+
+    width:
+        100%;
+
+}
+
+
+/* =================================
+   EDITABLE TEXT
+================================= */
+
+.slide h1,
+.slide p {
+
+    outline:
+        none;
+
+    cursor:
+        text;
+
+}
+
+
+.slide h1 {
+
+    font-size:
+        clamp(30px, 5vw, 60px);
+
+    margin-bottom:
+        25px;
+
+}
+
+
+.slide p {
+
+    font-size:
+        clamp(18px, 2.5vw, 30px);
+
+    line-height:
+        1.5;
+
+    margin:
+        8px 0;
+
+}
+
+
+/* Bila sedang edit */
+
+.slide h1:focus,
+.slide p:focus {
+
+    outline:
+        2px dashed #999999;
+
+    outline-offset:
+        5px;
+
+}
+
+
+/* =================================
+   IMAGE
+================================= */
+
+.slideImage {
+
+    max-width:
+        70%;
+
+    max-height:
+        45%;
+
+    object-fit:
+        contain;
+
+    display:
+        block;
+
+    margin:
+        20px auto;
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.25);
+
+}
+
+
+.imageWrapper {
+
+    position:
+        relative;
+
+    display:
+        inline-block;
+
+    margin:
+        10px auto;
+
+}
+
+
+.removeImageBtn {
+
+    position:
+        absolute;
+
+    top:
+        -8px;
+
+    right:
+        -8px;
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    border:
+        none;
+
+    border-radius:
+        50%;
+
+    background:
+        #222222;
+
+    color:
+        white;
+
+    cursor:
+        pointer;
+
+    font-size:
+        14px;
+
+}
+
+
+/* =================================
+   SLIDE ANIMATION
+================================= */
+
+@keyframes slideIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateX(40px)
+            scale(0.97);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateX(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =================================
+   CONTROLS
+================================= */
+
+.controls {
+
+    height:
+        70px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+}
+
+
+.controls button {
+
+    border:
+        none;
+
+    background:
+        #292929;
+
+    color:
+        white;
+
+    width:
+        52px;
+
+    height:
+        44px;
+
+    border-radius:
+        9px;
+
+    font-size:
+        20px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.controls button:hover {
+
+    background:
+        #3b3b3b;
+
+    box-shadow:
+        0 0 15px rgba(255,255,255,0.15);
+
+}
+
+
+#slideNumber {
+
+    min-width:
+        60px;
+
+    text-align:
+        center;
+
+    font-weight:
+        bold;
+
+}
+
+
+/* =================================
+   STOP BUTTON
+================================= */
+
+#stopBtn {
+
+    display:
+        none;
+
+    width:
+        auto;
+
+    padding:
+        0 18px;
+
+}
+
+
+/* =================================
+   SAVE STATUS
+================================= */
+
+#saveStatus {
+
+    position:
+        fixed;
+
+    bottom:
+        12px;
+
+    left:
+        15px;
+
+    font-size:
+        12px;
+
+    color:
+        #aaaaaa;
+
+}
+
+
+/* =================================
+   PRESENTATION MODE
+================================= */
+
+body.presentation-mode {
+
+    background:
+        #000000;
+
+    overflow:
+        hidden;
+
+}
+
+
+body.presentation-mode #topBar {
+
+    display:
+        none;
+
+}
+
+
+body.presentation-mode #editor {
+
+    width:
+        100vw;
+
+    height:
+        100vh;
+
+    min-height:
+        100vh;
+
+    padding:
+        0;
+
+}
+
+
+body.presentation-mode .slide {
+
+    width:
+        100vw;
+
+    height:
+        100vh;
+
+    aspect-ratio:
+        auto;
+
+    border-radius:
+        0;
+
+    box-shadow:
+        none;
+
+    padding:
+        10vw;
+
+}
+
+
+body.presentation-mode .slide h1,
+body.presentation-mode .slide p {
+
+    cursor:
+        default;
+
+}
+
+
+body.presentation-mode .slide h1:focus,
+body.presentation-mode .slide p:focus {
+
+    outline:
+        none;
+
+}
+
+
+body.presentation-mode .controls {
+
+    position:
+        fixed;
+
+    bottom:
+        20px;
+
+    left:
+        50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index:
+        9999;
+
+    height:
+        auto;
+
+    padding:
+        8px 12px;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(20,20,20,0.8);
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+body.presentation-mode #stopBtn {
+
+    display:
+        inline-block;
+
+}
+
+
+body.presentation-mode #saveStatus {
+
+    display:
+        none;
+
+}
+
+
+/* Hide remove image button during presentation */
+
+body.presentation-mode .removeImageBtn {
+
+    display:
+        none;
+
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    header {
+
+        height:
+            auto;
+
+        min-height:
+            65px;
+
+        padding:
+            10px;
+
+        flex-direction:
+            column;
+
+        gap:
+            10px;
+
+    }
+
+
+    .logo {
+
+        font-size:
+            18px;
+
+    }
+
+
+    .topButtons {
+
+        width:
+            100%;
+
+        justify-content:
+            center;
+
+        flex-wrap:
+            wrap;
+
+    }
+
+
+    .topButtons button {
+
+        font-size:
+            12px;
+
+        padding:
+            8px 10px;
+
+    }
+
+
+    #editor {
+
+        padding:
+            15px;
+
+        min-height:
+            calc(100vh - 180px);
+
+    }
+
+
+    .slide {
+
+        width:
+            95vw;
+
+        padding:
+            30px 20px;
+
+        border-radius:
+            12px;
+
+    }
+
+
+    .slideImage {
+
+        max-width:
+            80%;
+
+        max-height:
+            40%;
+
+    }
+
+
+    .controls {
+
+        gap:
+            7px;
+
+    }
+
+
+    .controls button {
+
+        width:
+            45px;
+
+        height:
+            40px;
+
+    }
+
+}
