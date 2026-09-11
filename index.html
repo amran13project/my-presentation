@@ -13,9 +13,1898 @@
 
   <title>Presentation Cloud</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css?v=999">
+
+  <!-- =====================================
+       CSS
+  ====================================== -->
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --dark: #111827;
+      --text: #172033;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --green: #10b981;
+      --red: #dc2626;
+      --yellow: #f59e0b;
+
+      --shadow:
+        0 10px 35px rgba(15, 23, 42, .08);
+    }
+
+
+    body {
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        var(--bg);
+
+      color:
+        var(--text);
+
+      min-height:
+        100vh;
+    }
+
+
+    /* =====================================
+       TOPBAR
+    ====================================== */
+
+    .topbar {
+      min-height: 92px;
+
+      background:
+        #111827;
+
+      color:
+        white;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        28px;
+
+      padding:
+        16px 32px;
+
+      position:
+        sticky;
+
+      top:
+        0;
+
+      z-index:
+        1000;
+
+      box-shadow:
+        0 5px 25px
+        rgba(0,0,0,.18);
+    }
+
+
+    /* =====================================
+       BRAND
+    ====================================== */
+
+    .brand {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        16px;
+
+      flex-shrink:
+        0;
+    }
+
+
+    .brand-icon {
+      width:
+        54px;
+
+      height:
+        54px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      border-radius:
+        14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #3b82f6,
+          #6366f1
+        );
+
+      font-size:
+        25px;
+
+      font-weight:
+        900;
+
+      box-shadow:
+        0 0 18px
+        rgba(99,102,241,.45);
+    }
+
+
+    .brand-text strong {
+      display:
+        block;
+
+      font-size:
+        20px;
+
+      font-weight:
+        800;
+    }
+
+
+    .brand-text span {
+      display:
+        block;
+
+      margin-top:
+        4px;
+
+      font-size:
+        13px;
+
+      color:
+        #9ca3af;
+    }
+
+
+    /* =====================================
+       TOOLBAR
+    ====================================== */
+
+    .toolbar {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        flex-end;
+
+      gap:
+        11px;
+
+      flex-wrap:
+        wrap;
+    }
+
+
+    /* =====================================
+       BUTTON
+    ====================================== */
+
+    button {
+      position:
+        relative;
+
+      overflow:
+        hidden;
+
+      border:
+        1px solid
+        rgba(255,255,255,.14);
+
+      border-radius:
+        12px;
+
+      padding:
+        14px 20px;
+
+      min-height:
+        52px;
+
+      min-width:
+        110px;
+
+      font-family:
+        inherit;
+
+      font-size:
+        15px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+    }
+
+
+    button:hover {
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 0 10px
+        rgba(59,130,246,.45),
+
+        0 0 24px
+        rgba(59,130,246,.25);
+    }
+
+
+    button:active {
+      transform:
+        scale(.96);
+
+      box-shadow:
+        0 0 16px
+        rgba(59,130,246,.65);
+    }
+
+
+    button:disabled {
+      opacity:
+        .40;
+
+      cursor:
+        not-allowed;
+
+      transform:
+        none;
+
+      box-shadow:
+        none;
+    }
+
+
+    button::after {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      top:
+        0;
+
+      left:
+        -120%;
+
+      width:
+        70%;
+
+      height:
+        100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.20),
+          transparent
+        );
+
+      transform:
+        skewX(-20deg);
+
+      transition:
+        left .5s ease;
+
+      pointer-events:
+        none;
+    }
+
+
+    button:hover::after {
+      left:
+        140%;
+    }
+
+
+    /* =====================================
+       MAIN BUTTONS
+    ====================================== */
+
+    .edit-btn {
+      background:
+        #fef3c7;
+
+      color:
+        #92400e;
+
+      border-color:
+        #f59e0b;
+    }
+
+
+    .edit-btn:hover {
+      background:
+        #fde68a;
+
+      box-shadow:
+        0 0 12px
+        rgba(245,158,11,.75),
+
+        0 0 30px
+        rgba(245,158,11,.40);
+    }
+
+
+    .primary-btn {
+      background:
+        var(--blue);
+
+      color:
+        white;
+
+      border-color:
+        #3b82f6;
+    }
+
+
+    .primary-btn:hover {
+      background:
+        #3b82f6;
+
+      box-shadow:
+        0 0 12px
+        rgba(59,130,246,.85),
+
+        0 0 32px
+        rgba(59,130,246,.48);
+    }
+
+
+    .danger-btn {
+      background:
+        #dc2626;
+
+      color:
+        white;
+
+      border-color:
+        #ef4444;
+    }
+
+
+    .danger-btn:hover {
+      background:
+        #ef4444;
+
+      box-shadow:
+        0 0 12px
+        rgba(239,68,68,.80),
+
+        0 0 30px
+        rgba(239,68,68,.48);
+    }
+
+
+    .present-btn {
+      background:
+        #7c3aed;
+
+      color:
+        white;
+
+      border-color:
+        #8b5cf6;
+    }
+
+
+    .present-btn:hover {
+      background:
+        #8b5cf6;
+
+      box-shadow:
+        0 0 12px
+        rgba(139,92,246,.85),
+
+        0 0 32px
+        rgba(139,92,246,.50);
+    }
+
+
+    #addImageBtn {
+      background:
+        #111827;
+
+      color:
+        #c4b5fd;
+
+      border-color:
+        #4c1d95;
+    }
+
+
+    #addSlideBtn {
+      background:
+        #111827;
+
+      color:
+        #86efac;
+
+      border-color:
+        #166534;
+    }
+
+
+    #deleteSlideBtn {
+      background:
+        #450a0a;
+
+      color:
+        #fca5a5;
+
+      border-color:
+        #991b1b;
+    }
+
+
+    /* =====================================
+       WORKSPACE
+    ====================================== */
+
+    .workspace {
+      display:
+        grid;
+
+      grid-template-columns:
+        260px
+        minmax(0,1fr)
+        370px;
+
+      gap:
+        22px;
+
+      max-width:
+        1800px;
+
+      margin:
+        auto;
+
+      padding:
+        25px;
+    }
+
+
+    /* =====================================
+       SIDEBAR
+    ====================================== */
+
+    .slide-sidebar {
+      background:
+        white;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        17px;
+
+      padding:
+        18px;
+
+      height:
+        fit-content;
+
+      position:
+        sticky;
+
+      top:
+        114px;
+
+      box-shadow:
+        var(--shadow);
+    }
+
+
+    .sidebar-title {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      margin-bottom:
+        17px;
+    }
+
+
+    .sidebar-title strong {
+      display:
+        block;
+
+      font-size:
+        17px;
+    }
+
+
+    .sidebar-title small {
+      display:
+        block;
+
+      margin-top:
+        4px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        12px;
+    }
+
+
+    .small-add-btn {
+      width:
+        48px;
+
+      height:
+        48px;
+
+      min-width:
+        48px;
+
+      min-height:
+        48px;
+
+      padding:
+        0;
+
+      background:
+        #eef2ff;
+
+      color:
+        var(--blue);
+
+      font-size:
+        26px;
+    }
+
+
+    /* =====================================
+       THUMBNAILS
+    ====================================== */
+
+    #slideThumbnails {
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        13px;
+
+      max-height:
+        70vh;
+
+      overflow-y:
+        auto;
+    }
+
+
+    .slide-thumbnail {
+      position:
+        relative;
+
+      width:
+        100%;
+
+      min-height:
+        120px;
+
+      padding:
+        12px;
+
+      border:
+        2px solid
+        transparent;
+
+      border-radius:
+        12px;
+
+      background:
+        #f8fafc;
+
+      cursor:
+        pointer;
+
+      overflow:
+        hidden;
+
+      transition:
+        .18s ease;
+    }
+
+
+    .slide-thumbnail:hover {
+      border-color:
+        #93c5fd;
+
+      background:
+        #eff6ff;
+
+      box-shadow:
+        0 0 12px
+        rgba(59,130,246,.30);
+    }
+
+
+    .slide-thumbnail.active {
+      border-color:
+        var(--blue);
+
+      background:
+        #eff6ff;
+
+      box-shadow:
+        0 0 13px
+        rgba(37,99,235,.38);
+    }
+
+
+    .thumbnail-number {
+      position:
+        absolute;
+
+      top:
+        8px;
+
+      left:
+        9px;
+
+      width:
+        25px;
+
+      height:
+        25px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      border-radius:
+        7px;
+
+      background:
+        #111827;
+
+      color:
+        white;
+
+      font-size:
+        12px;
+
+      font-weight:
+        bold;
+    }
+
+
+    .thumbnail-content {
+      padding:
+        23px 7px 7px;
+    }
+
+
+    .thumbnail-title {
+      font-size:
+        13px;
+
+      font-weight:
+        800;
+
+      white-space:
+        nowrap;
+
+      overflow:
+        hidden;
+
+      text-overflow:
+        ellipsis;
+    }
+
+
+    .thumbnail-text {
+      margin-top:
+        7px;
+
+      font-size:
+        11px;
+
+      color:
+        #6b7280;
+
+      line-height:
+        1.35;
+
+      max-height:
+        35px;
+
+      overflow:
+        hidden;
+    }
+
+
+    /* =====================================
+       EDITOR
+    ====================================== */
+
+    .editor-area {
+      min-width:
+        0;
+    }
+
+
+    .editor-top {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        16px;
+
+      margin-bottom:
+        17px;
+    }
+
+
+    .editor-label {
+      font-size:
+        12px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--blue);
+
+      letter-spacing:
+        1.4px;
+    }
+
+
+    .editor-top h1 {
+      margin-top:
+        5px;
+
+      font-size:
+        25px;
+
+      color:
+        #111827;
+    }
+
+
+    #saveStatus {
+      padding:
+        11px 16px;
+
+      border-radius:
+        22px;
+
+      background:
+        white;
+
+      border:
+        1px solid
+        var(--border);
+
+      color:
+        #6b7280;
+
+      font-size:
+        14px;
+
+      font-weight:
+        700;
+
+      white-space:
+        nowrap;
+    }
+
+
+    /* =====================================
+       EDITOR CANVAS
+    ====================================== */
+
+    #editor {
+      min-height:
+        680px;
+
+      padding:
+        45px;
+
+      border-radius:
+        19px;
+
+      background:
+        radial-gradient(
+          #d1d5db 1px,
+          transparent 1px
+        );
+
+      background-size:
+        20px 20px;
+
+      background-color:
+        #e5e7eb;
+
+      overflow:
+        auto;
+    }
+
+
+    #slideContainer {
+      width:
+        100%;
+    }
+
+
+    /* =====================================
+       SLIDE
+    ====================================== */
+
+    .slide {
+      display:
+        none;
+
+      width:
+        100%;
+
+      min-height:
+        580px;
+
+      padding:
+        78px;
+
+      background:
+        white;
+
+      border-radius:
+        15px;
+
+      box-shadow:
+        0 20px 50px
+        rgba(15,23,42,.16);
+    }
+
+
+    .slide.active {
+      display:
+        block;
+    }
+
+
+    .slide-content {
+      width:
+        100%;
+
+      min-height:
+        430px;
+    }
+
+
+    /* =====================================
+       TEXT
+    ====================================== */
+
+    .slide-title {
+      min-height:
+        65px;
+
+      margin-bottom:
+        30px;
+
+      padding:
+        6px;
+
+      border-radius:
+        8px;
+
+      outline:
+        none;
+
+      color:
+        #111827;
+
+      font-size:
+        48px;
+
+      line-height:
+        1.15;
+
+      font-weight:
+        800;
+    }
+
+
+    .slide-title:focus {
+      outline:
+        2px solid
+        #bfdbfe;
+
+      background:
+        #f8fbff;
+    }
+
+
+    .slide-text {
+      min-height:
+        300px;
+
+      padding:
+        15px;
+
+      border-radius:
+        10px;
+
+      outline:
+        none;
+
+      color:
+        #374151;
+
+      font-size:
+        22px;
+
+      line-height:
+        1.65;
+    }
+
+
+    .slide-text:focus {
+      background:
+        #f8fbff;
+
+      outline:
+        2px solid
+        #bfdbfe;
+    }
+
+
+    .slide img {
+      max-width:
+        100%;
+
+      height:
+        auto;
+
+      display:
+        block;
+
+      margin:
+        24px auto;
+
+      border-radius:
+        12px;
+    }
+
+
+    /* =====================================
+       NORMAL NAVIGATION
+    ====================================== */
+
+    .slide-controls {
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      gap:
+        14px;
+
+      margin-top:
+        18px;
+    }
+
+
+    .navigation-btn {
+      min-width:
+        62px;
+
+      min-height:
+        56px;
+
+      background:
+        #111827;
+
+      color:
+        white;
+
+      font-size:
+        25px;
+    }
+
+
+    #slideCounter {
+      min-width:
+        95px;
+
+      text-align:
+        center;
+
+      font-size:
+        15px;
+
+      font-weight:
+        800;
+    }
+
+
+    .stop-btn {
+      margin-left:
+        16px;
+
+      background:
+        #374151;
+
+      color:
+        white;
+
+      border-color:
+        #6b7280;
+    }
+
+
+    /* =====================================
+       CLOUD
+    ====================================== */
+
+    #cloudSection {
+      height:
+        fit-content;
+
+      padding:
+        22px;
+
+      background:
+        white;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        17px;
+
+      box-shadow:
+        var(--shadow);
+
+      position:
+        sticky;
+
+      top:
+        114px;
+    }
+
+
+    .cloud-header {
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        flex-start;
+
+      gap:
+        12px;
+    }
+
+
+    .cloud-label {
+      font-size:
+        12px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--blue);
+
+      letter-spacing:
+        1.4px;
+    }
+
+
+    .cloud-header h2 {
+      margin-top:
+        6px;
+
+      font-size:
+        21px;
+    }
+
+
+    #refreshCloudBtn {
+      width:
+        48px;
+
+      height:
+        48px;
+
+      min-width:
+        48px;
+
+      min-height:
+        48px;
+
+      padding:
+        0;
+
+      background:
+        #111827;
+
+      color:
+        #d1d5db;
+
+      font-size:
+        23px;
+    }
+
+
+    .cloud-description {
+      margin-top:
+        15px;
+
+      font-size:
+        14px;
+
+      line-height:
+        1.55;
+
+      color:
+        var(--muted);
+    }
+
+
+    .cloud-status {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        9px;
+
+      margin-top:
+        17px;
+
+      padding:
+        12px;
+
+      border-radius:
+        10px;
+
+      background:
+        #ecfdf5;
+
+      color:
+        #047857;
+
+      font-size:
+        13px;
+
+      font-weight:
+        700;
+    }
+
+
+    .status-dot {
+      width:
+        9px;
+
+      height:
+        9px;
+
+      border-radius:
+        50%;
+
+      background:
+        #10b981;
+
+      box-shadow:
+        0 0 8px
+        rgba(16,185,129,.65);
+    }
+
+
+    /* =====================================
+       CLOUD LIST
+    ====================================== */
+
+    #savedPresentations {
+      margin-top:
+        18px;
+    }
+
+
+    .cloud-presentation {
+      padding:
+        15px;
+
+      margin-bottom:
+        12px;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        12px;
+
+      background:
+        #fafafa;
+
+      transition:
+        .18s ease;
+    }
+
+
+    .cloud-presentation:hover {
+      border-color:
+        #bfdbfe;
+
+      box-shadow:
+        0 6px 18px
+        rgba(37,99,235,.10);
+    }
+
+
+    .cloud-presentation strong {
+      display:
+        block;
+
+      font-size:
+        15px;
+
+      color:
+        #111827;
+
+      word-break:
+        break-word;
+    }
+
+
+    .cloud-presentation small {
+      display:
+        block;
+
+      margin-top:
+        6px;
+
+      color:
+        #9ca3af;
+
+      font-size:
+        11px;
+    }
+
+
+    .cloud-presentation > div:last-child {
+      display:
+        flex;
+
+      gap:
+        8px;
+
+      flex-wrap:
+        wrap;
+
+      margin-top:
+        12px;
+    }
+
+
+    .cloud-presentation button {
+      padding:
+        11px 13px;
+
+      min-width:
+        80px;
+
+      min-height:
+        43px;
+
+      font-size:
+        12px;
+    }
+
+
+    .open-cloud-btn {
+      background:
+        #172554;
+
+      color:
+        #93c5fd;
+
+      border-color:
+        #2563eb;
+    }
+
+
+    .edit-cloud-btn {
+      background:
+        #422006;
+
+      color:
+        #fcd34d;
+
+      border-color:
+        #f59e0b;
+    }
+
+
+    .delete-cloud-btn {
+      background:
+        #450a0a;
+
+      color:
+        #fca5a5;
+
+      border-color:
+        #dc2626;
+    }
+
+
+    /* =====================================
+       PRESENTATION MODE
+    ====================================== */
+
+    body.presentation-mode {
+      background:
+        #000000;
+
+      overflow:
+        hidden;
+    }
+
+
+    body.presentation-mode .topbar,
+    body.presentation-mode .slide-sidebar,
+    body.presentation-mode #cloudSection,
+    body.presentation-mode .editor-top,
+    body.presentation-mode .slide-controls {
+      display:
+        none !important;
+    }
+
+
+    body.presentation-mode .workspace {
+      display:
+        block;
+
+      padding:
+        0;
+
+      max-width:
+        none;
+    }
+
+
+    body.presentation-mode .editor-area {
+      width:
+        100%;
+
+      min-height:
+        100vh;
+
+      padding:
+        0;
+
+      background:
+        #000000;
+    }
+
+
+    body.presentation-mode #editor {
+      width:
+        100%;
+
+      height:
+        100vh;
+
+      min-height:
+        100vh;
+
+      padding:
+        0;
+
+      border-radius:
+        0;
+
+      background:
+        #000000;
+
+      overflow:
+        hidden;
+    }
+
+
+    body.presentation-mode #slideContainer {
+      width:
+        100%;
+
+      height:
+        100%;
+    }
+
+
+    body.presentation-mode .slide {
+      width:
+        100%;
+
+      height:
+        100vh;
+
+      min-height:
+        100vh;
+
+      padding:
+        8vw;
+
+      border-radius:
+        0;
+
+      box-shadow:
+        none;
+
+      overflow:
+        auto;
+    }
+
+
+    body.presentation-mode .slide-title {
+      font-size:
+        5vw;
+    }
+
+
+    body.presentation-mode .slide-text {
+      font-size:
+        2.3vw;
+    }
+
+
+    /* =====================================
+       PRESENTATION BOTTOM BAR
+    ====================================== */
+
+    #presentationNavigation {
+      display:
+        none;
+    }
+
+
+    body.presentation-mode #presentationNavigation {
+      display:
+        flex;
+
+      position:
+        fixed;
+
+      left:
+        50%;
+
+      bottom:
+        24px;
+
+      transform:
+        translateX(-50%);
+
+      z-index:
+        99999;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      gap:
+        10px;
+
+      padding:
+        8px 10px;
+
+      border-radius:
+        15px;
+
+      background:
+        rgba(17,24,39,.88);
+
+      border:
+        1px solid
+        rgba(255,255,255,.15);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.45);
+    }
+
+
+    #presentationPrevBtn,
+    #presentationNextBtn {
+      width:
+        64px !important;
+
+      height:
+        50px !important;
+
+      min-width:
+        64px !important;
+
+      min-height:
+        50px !important;
+
+      padding:
+        0 !important;
+
+      border-radius:
+        10px !important;
+
+      background:
+        rgba(31,41,55,.96);
+
+      color:
+        white;
+
+      border:
+        1px solid
+        rgba(255,255,255,.16);
+
+      font-size:
+        28px !important;
+
+      font-weight:
+        800;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+    }
+
+
+    #presentationPrevBtn:hover,
+    #presentationNextBtn:hover {
+      background:
+        #2563eb;
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 0 12px
+        rgba(59,130,246,.85),
+
+        0 0 28px
+        rgba(59,130,246,.45);
+    }
+
+
+    #presentationPrevBtn:active,
+    #presentationNextBtn:active {
+      transform:
+        scale(.93);
+    }
+
+
+    /* =====================================
+       TABLET
+    ====================================== */
+
+    @media (max-width: 1150px) {
+
+      .workspace {
+        grid-template-columns:
+          210px
+          minmax(0,1fr);
+
+        padding:
+          18px;
+      }
+
+
+      #cloudSection {
+        grid-column:
+          1 / -1;
+
+        position:
+          static;
+      }
+
+
+      .slide-sidebar {
+        position:
+          static;
+      }
+
+    }
+
+
+    /* =====================================
+       MOBILE
+    ====================================== */
+
+    @media (max-width: 750px) {
+
+      .topbar {
+        flex-direction:
+          column;
+
+        align-items:
+          stretch;
+
+        padding:
+          16px;
+      }
+
+
+      .brand {
+        justify-content:
+          center;
+      }
+
+
+      .toolbar {
+        justify-content:
+          center;
+
+        gap:
+          8px;
+      }
+
+
+      .toolbar button {
+        flex:
+          1;
+
+        min-width:
+          120px;
+
+        min-height:
+          54px;
+
+        font-size:
+          14px;
+      }
+
+
+      .workspace {
+        display:
+          flex;
+
+        flex-direction:
+          column;
+
+        padding:
+          11px;
+      }
+
+
+      .slide-sidebar {
+        width:
+          100%;
+      }
+
+
+      #slideThumbnails {
+        flex-direction:
+          row;
+
+        overflow-x:
+          auto;
+
+        max-height:
+          none;
+      }
+
+
+      .slide-thumbnail {
+        min-width:
+          155px;
+
+        min-height:
+          115px;
+      }
+
+
+      #editor {
+        min-height:
+          460px;
+
+        padding:
+          14px;
+      }
+
+
+      .slide {
+        min-height:
+          420px;
+
+        padding:
+          34px 24px;
+      }
+
+
+      .slide-title {
+        font-size:
+          32px;
+      }
+
+
+      .slide-text {
+        font-size:
+          18px;
+      }
+
+
+      .editor-top {
+        flex-direction:
+          column;
+
+        align-items:
+          stretch;
+      }
+
+
+      #saveStatus {
+        text-align:
+          center;
+      }
+
+
+      body.presentation-mode
+      #presentationNavigation {
+        bottom:
+          14px;
+      }
+
+
+      #presentationPrevBtn,
+      #presentationNextBtn {
+        width:
+          56px !important;
+
+        height:
+          44px !important;
+
+        min-width:
+          56px !important;
+
+        min-height:
+          44px !important;
+
+        font-size:
+          24px !important;
+      }
+
+    }
+
+
+    /* =====================================
+       SMALL PHONE
+    ====================================== */
+
+    @media (max-width: 480px) {
+
+      .toolbar {
+        display:
+          grid;
+
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+
+      .toolbar button {
+        min-width:
+          0;
+
+        min-height:
+          52px;
+
+        font-size:
+          13px;
+      }
+
+
+      .slide {
+        min-height:
+          380px;
+
+        padding:
+          24px 17px;
+      }
+
+
+      .slide-title {
+        font-size:
+          27px;
+      }
+
+
+      .slide-text {
+        font-size:
+          16px;
+      }
+
+    }
+
+  </style>
 
 </head>
 
@@ -23,21 +1912,17 @@
 <body>
 
 
-  <!-- ================================= -->
-  <!-- TOP BAR -->
-  <!-- ================================= -->
+  <!-- =====================================
+       TOP BAR
+  ====================================== -->
 
   <header class="topbar">
-
-
-    <!-- BRAND -->
 
     <div class="brand">
 
       <div class="brand-icon">
         P
       </div>
-
 
       <div class="brand-text">
 
@@ -54,106 +1939,82 @@
     </div>
 
 
-    <!-- ================================= -->
-    <!-- ALL MAIN BUTTONS -->
-    <!-- ================================= -->
-
     <div class="toolbar">
-
-
-      <!-- EDIT -->
 
       <button
         id="editBtn"
         class="edit-btn"
-      >
+        type="button">
 
         ✏️ Edit
 
       </button>
 
 
-      <!-- SAVE -->
-
       <button
         id="saveBtn"
         class="primary-btn"
-      >
+        type="button">
 
         💾 Save
 
       </button>
 
 
-      <!-- IMAGE -->
-
       <button
         id="addImageBtn"
-      >
+        type="button">
 
         🖼️ Image
 
       </button>
 
 
-      <!-- ADD SLIDE -->
-
       <button
         id="addSlideBtn"
-      >
+        type="button">
 
         ＋ Slide
 
       </button>
 
 
-      <!-- DELETE SLIDE -->
-
       <button
         id="deleteSlideBtn"
         class="danger-btn"
-      >
+        type="button">
 
         🗑️ Delete
 
       </button>
 
 
-      <!-- PRESENT -->
-
       <button
         id="presentBtn"
         class="present-btn"
-      >
+        type="button">
 
         ▶ Present
 
       </button>
-
 
     </div>
 
   </header>
 
 
-  <!-- ================================= -->
-  <!-- MAIN WORKSPACE -->
-  <!-- ================================= -->
+  <!-- =====================================
+       WORKSPACE
+  ====================================== -->
 
   <main class="workspace">
 
 
-    <!-- ================================= -->
-    <!-- LEFT SLIDE SIDEBAR -->
-    <!-- ================================= -->
+    <!-- LEFT -->
 
     <aside class="slide-sidebar">
 
-
-      <!-- SIDEBAR HEADER -->
-
       <div class="sidebar-title">
-
 
         <div>
 
@@ -161,56 +2022,43 @@
             Slides
           </strong>
 
-
           <small id="slideNumber">
-            1 / 1
+            1 / 3
           </small>
 
         </div>
 
 
-        <!-- SMALL ADD BUTTON -->
-
         <button
           id="newSlideSmallBtn"
           class="small-add-btn"
-        >
+          type="button">
 
           ＋
 
         </button>
 
-
       </div>
 
-
-      <!-- SLIDE THUMBNAILS -->
 
       <div id="slideThumbnails">
       </div>
 
-
     </aside>
 
 
-    <!-- ================================= -->
     <!-- EDITOR -->
-    <!-- ================================= -->
 
     <section class="editor-area">
 
 
-      <!-- EDITOR HEADER -->
-
       <div class="editor-top">
-
 
         <div>
 
           <span class="editor-label">
             EDITOR
           </span>
-
 
           <h1>
             Presentation Editor
@@ -219,104 +2067,73 @@
         </div>
 
 
-        <!-- SAVE STATUS -->
-
         <div id="saveStatus">
           Ready
         </div>
 
-
       </div>
 
 
-      <!-- ================================= -->
-      <!-- SLIDE CANVAS -->
-      <!-- ================================= -->
-
       <div id="editor">
-
 
         <div id="slideContainer">
         </div>
 
-
       </div>
 
 
-      <!-- ================================= -->
-      <!-- NORMAL SLIDE CONTROLS -->
-      <!-- ================================= -->
-
       <div class="slide-controls">
-
-
-        <!-- PREVIOUS -->
 
         <button
           id="previousBtn"
           class="navigation-btn"
-        >
+          type="button">
 
           ←
 
         </button>
 
 
-        <!-- COUNTER -->
-
         <span id="slideCounter">
-          1 / 1
+          1 / 3
         </span>
 
-
-        <!-- NEXT -->
 
         <button
           id="nextBtn"
           class="navigation-btn"
-        >
+          type="button">
 
           →
 
         </button>
 
 
-        <!-- STOP -->
-
         <button
           id="stopBtn"
           class="stop-btn"
-        >
+          type="button">
 
           ✕ Stop
 
         </button>
 
-
       </div>
-
 
     </section>
 
 
-    <!-- ================================= -->
-    <!-- CLOUD PANEL -->
-    <!-- ================================= -->
+    <!-- CLOUD -->
 
     <aside id="cloudSection">
 
-
-      <!-- CLOUD HEADER -->
-
       <div class="cloud-header">
-
 
         <div>
 
           <span class="cloud-label">
             CLOUD
           </span>
-
 
           <h2>
             ☁️ My Presentations
@@ -325,22 +2142,16 @@
         </div>
 
 
-        <!-- REFRESH -->
-
         <button
           id="refreshCloudBtn"
-          class="refresh-btn"
-        >
+          type="button">
 
           ↻
 
         </button>
 
-
       </div>
 
-
-      <!-- DESCRIPTION -->
 
       <p class="cloud-description">
 
@@ -351,37 +2162,26 @@
       </p>
 
 
-      <!-- CLOUD STATUS -->
-
       <div class="cloud-status">
 
         <span class="status-dot">
         </span>
-
 
         Cloud connected
 
       </div>
 
 
-      <!-- SAVED PRESENTATIONS -->
-
       <div id="savedPresentations">
-
         Loading...
-
       </div>
 
-
     </aside>
-
 
   </main>
 
 
-  <!-- ================================= -->
   <!-- IMAGE INPUT -->
-  <!-- ================================= -->
 
   <input
     type="file"
@@ -391,56 +2191,2205 @@
   >
 
 
-  <!-- ================================= -->
-  <!-- PRESENTATION NAVIGATION -->
-  <!-- ONLY APPEARS DURING PRESENT -->
-  <!-- ================================= -->
+  <!-- =====================================
+       PRESENTATION BOTTOM BAR
+  ====================================== -->
 
   <div id="presentationNavigation">
 
-
-    <!-- PRESENT PREVIOUS -->
-
     <button
       id="presentationPrevBtn"
-      aria-label="Previous slide"
-    >
+      type="button">
 
       ←
 
     </button>
 
 
-    <!-- PRESENT NEXT -->
-
     <button
       id="presentationNextBtn"
-      aria-label="Next slide"
-    >
+      type="button">
 
       →
 
     </button>
 
-
   </div>
 
 
-  <!-- ================================= -->
-  <!-- SUPABASE -->
-  <!-- ================================= -->
+  <!-- =====================================
+       SUPABASE
+  ====================================== -->
 
   <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-  ></script>
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  </script>
 
 
-  <!-- ================================= -->
-  <!-- APPLICATION SCRIPT -->
-  <!-- ================================= -->
+  <!-- =====================================
+       JAVASCRIPT
+  ====================================== -->
 
-  <script src="script.js?v=999"></script>
+  <script>
 
+    // ======================================
+    // SUPABASE
+    // ======================================
+
+    const SUPABASE_URL =
+      "https://fmqhmubzqkyrtduzvkkf.supabase.co";
+
+
+    const SUPABASE_KEY =
+      "sb_publishable_PgfVAhoqgdYJssbfspW7Ig_MlVYzUw2";
+
+
+    let supabaseClient =
+      null;
+
+
+    if (
+      window.supabase &&
+      typeof window.supabase.createClient ===
+      "function"
+    ) {
+
+      try {
+
+        supabaseClient =
+          window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+          );
+
+      } catch (error) {
+
+        console.error(
+          "Supabase error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    // ======================================
+    // DEFAULT SLIDES
+    // ======================================
+
+    const defaultSlides = [
+
+      {
+        title:
+          "My Presentation",
+
+        content:
+          "Welcome to my presentation!"
+      },
+
+      {
+        title:
+          "Slide 2",
+
+        content:
+          "Add your content here."
+      },
+
+      {
+        title:
+          "Slide 3",
+
+        content:
+          "You can edit this slide."
+      }
+
+    ];
+
+
+    // ======================================
+    // VARIABLES
+    // ======================================
+
+    let slides = [];
+
+    let currentSlide = 0;
+
+    let currentPresentationId = null;
+
+    let isEditMode = true;
+
+    let autoSaveTimer = null;
+
+
+    // ======================================
+    // ELEMENTS
+    // ======================================
+
+    const editor =
+      document.getElementById(
+        "editor"
+      );
+
+
+    const slideContainer =
+      document.getElementById(
+        "slideContainer"
+      );
+
+
+    const slideThumbnails =
+      document.getElementById(
+        "slideThumbnails"
+      );
+
+
+    const slideNumber =
+      document.getElementById(
+        "slideNumber"
+      );
+
+
+    const slideCounter =
+      document.getElementById(
+        "slideCounter"
+      );
+
+
+    const saveStatus =
+      document.getElementById(
+        "saveStatus"
+      );
+
+
+    const previousBtn =
+      document.getElementById(
+        "previousBtn"
+      );
+
+
+    const nextBtn =
+      document.getElementById(
+        "nextBtn"
+      );
+
+
+    const stopBtn =
+      document.getElementById(
+        "stopBtn"
+      );
+
+
+    const saveBtn =
+      document.getElementById(
+        "saveBtn"
+      );
+
+
+    const editBtn =
+      document.getElementById(
+        "editBtn"
+      );
+
+
+    const addImageBtn =
+      document.getElementById(
+        "addImageBtn"
+      );
+
+
+    const addSlideBtn =
+      document.getElementById(
+        "addSlideBtn"
+      );
+
+
+    const newSlideSmallBtn =
+      document.getElementById(
+        "newSlideSmallBtn"
+      );
+
+
+    const deleteSlideBtn =
+      document.getElementById(
+        "deleteSlideBtn"
+      );
+
+
+    const presentBtn =
+      document.getElementById(
+        "presentBtn"
+      );
+
+
+    const imageInput =
+      document.getElementById(
+        "imageInput"
+      );
+
+
+    const refreshCloudBtn =
+      document.getElementById(
+        "refreshCloudBtn"
+      );
+
+
+    const savedPresentations =
+      document.getElementById(
+        "savedPresentations"
+      );
+
+
+    const presentationNavigation =
+      document.getElementById(
+        "presentationNavigation"
+      );
+
+
+    const presentationPrevBtn =
+      document.getElementById(
+        "presentationPrevBtn"
+      );
+
+
+    const presentationNextBtn =
+      document.getElementById(
+        "presentationNextBtn"
+      );
+
+
+    // ======================================
+    // STATUS
+    // ======================================
+
+    function setStatus(
+      message
+    ) {
+
+      if (saveStatus) {
+
+        saveStatus.textContent =
+          message;
+
+      }
+
+    }
+
+
+    // ======================================
+    // LOCAL SAVE
+    // ======================================
+
+    function saveLocalSlides() {
+
+      try {
+
+        localStorage.setItem(
+          "myPresentationSlides",
+          JSON.stringify(
+            slides
+          )
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Local save error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    // ======================================
+    // LOCAL LOAD
+    // ======================================
+
+    function loadLocalSlides() {
+
+      try {
+
+        const saved =
+          localStorage.getItem(
+            "myPresentationSlides"
+          );
+
+
+        if (!saved) {
+
+          slides =
+            JSON.parse(
+              JSON.stringify(
+                defaultSlides
+              )
+            );
+
+          return;
+
+        }
+
+
+        const parsed =
+          JSON.parse(
+            saved
+          );
+
+
+        if (
+          !Array.isArray(parsed) ||
+          parsed.length === 0
+        ) {
+
+          slides =
+            JSON.parse(
+              JSON.stringify(
+                defaultSlides
+              )
+            );
+
+          return;
+
+        }
+
+
+        slides =
+          parsed;
+
+      } catch (error) {
+
+        console.error(
+          "Load error:",
+          error
+        );
+
+
+        slides =
+          JSON.parse(
+            JSON.stringify(
+              defaultSlides
+            )
+          );
+
+      }
+
+    }
+
+
+    // ======================================
+    // STRIP HTML
+    // ======================================
+
+    function stripHTML(
+      html
+    ) {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.innerHTML =
+        html || "";
+
+
+      return (
+        div.textContent ||
+        div.innerText ||
+        ""
+      )
+        .replace(
+          /\s+/g,
+          " "
+        )
+        .trim();
+
+    }
+
+
+    // ======================================
+    // RENDER
+    // ======================================
+
+    function renderSlides() {
+
+      if (!slideContainer) {
+        return;
+      }
+
+
+      slideContainer.innerHTML =
+        "";
+
+
+      slides.forEach(
+        function (
+          slide,
+          index
+        ) {
+
+          const slideElement =
+            document.createElement(
+              "div"
+            );
+
+
+          slideElement.className =
+            "slide";
+
+
+          if (
+            index === currentSlide
+          ) {
+
+            slideElement.classList.add(
+              "active"
+            );
+
+          }
+
+
+          const slideContent =
+            document.createElement(
+              "div"
+            );
+
+
+          slideContent.className =
+            "slide-content";
+
+
+          const title =
+            document.createElement(
+              "div"
+            );
+
+
+          title.className =
+            "slide-title";
+
+
+          title.contentEditable =
+            isEditMode
+              ? "true"
+              : "false";
+
+
+          title.spellcheck =
+            true;
+
+
+          title.textContent =
+            slide.title ||
+            "Slide " +
+            (index + 1);
+
+
+          const text =
+            document.createElement(
+              "div"
+            );
+
+
+          text.className =
+            "slide-text";
+
+
+          text.contentEditable =
+            isEditMode
+              ? "true"
+              : "false";
+
+
+          text.spellcheck =
+            true;
+
+
+          text.innerHTML =
+            slide.content ||
+            "";
+
+
+          title.addEventListener(
+            "input",
+            function () {
+
+              slides[index].title =
+                this.textContent;
+
+
+              saveLocalSlides();
+
+              renderThumbnails();
+
+              scheduleAutoSave();
+
+            }
+          );
+
+
+          text.addEventListener(
+            "input",
+            function () {
+
+              slides[index].content =
+                this.innerHTML;
+
+
+              saveLocalSlides();
+
+              renderThumbnails();
+
+              scheduleAutoSave();
+
+            }
+          );
+
+
+          slideContent.appendChild(
+            title
+          );
+
+
+          slideContent.appendChild(
+            text
+          );
+
+
+          slideElement.appendChild(
+            slideContent
+          );
+
+
+          slideContainer.appendChild(
+            slideElement
+          );
+
+        }
+      );
+
+
+      renderThumbnails();
+
+      updateSlideUI();
+
+    }
+
+
+    // ======================================
+    // THUMBNAILS
+    // ======================================
+
+    function renderThumbnails() {
+
+      if (!slideThumbnails) {
+        return;
+      }
+
+
+      slideThumbnails.innerHTML =
+        "";
+
+
+      slides.forEach(
+        function (
+          slide,
+          index
+        ) {
+
+          const thumbnail =
+            document.createElement(
+              "div"
+            );
+
+
+          thumbnail.className =
+            "slide-thumbnail";
+
+
+          if (
+            index === currentSlide
+          ) {
+
+            thumbnail.classList.add(
+              "active"
+            );
+
+          }
+
+
+          thumbnail.innerHTML = `
+
+            <div class="thumbnail-number">
+              ${index + 1}
+            </div>
+
+            <div class="thumbnail-content">
+
+              <div class="thumbnail-title">
+                ${escapeHTML(
+                  slide.title ||
+                  "Slide " +
+                  (index + 1)
+                )}
+              </div>
+
+              <div class="thumbnail-text">
+                ${escapeHTML(
+                  stripHTML(
+                    slide.content
+                  ) ||
+                  "Empty slide"
+                )}
+              </div>
+
+            </div>
+
+          `;
+
+
+          thumbnail.addEventListener(
+            "click",
+            function () {
+
+              showSlide(index);
+
+            }
+          );
+
+
+          slideThumbnails.appendChild(
+            thumbnail
+          );
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // ESCAPE HTML
+    // ======================================
+
+    function escapeHTML(
+      text
+    ) {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.textContent =
+        text ?? "";
+
+
+      return div.innerHTML;
+
+    }
+
+
+    // ======================================
+    // UPDATE UI
+    // ======================================
+
+    function updateSlideUI() {
+
+      const total =
+        slides.length;
+
+
+      if (
+        total === 0
+      ) {
+
+        return;
+
+      }
+
+
+      const counter =
+        (currentSlide + 1) +
+        " / " +
+        total;
+
+
+      if (slideNumber) {
+
+        slideNumber.textContent =
+          counter;
+
+      }
+
+
+      if (slideCounter) {
+
+        slideCounter.textContent =
+          counter;
+
+      }
+
+
+      if (previousBtn) {
+
+        previousBtn.disabled =
+          currentSlide <= 0;
+
+      }
+
+
+      if (nextBtn) {
+
+        nextBtn.disabled =
+          currentSlide >=
+          total - 1;
+
+      }
+
+
+      if (presentationPrevBtn) {
+
+        presentationPrevBtn.disabled =
+          currentSlide <= 0;
+
+      }
+
+
+      if (presentationNextBtn) {
+
+        presentationNextBtn.disabled =
+          currentSlide >=
+          total - 1;
+
+      }
+
+
+      document
+        .querySelectorAll(
+          ".slide"
+        )
+        .forEach(
+          function (
+            slide,
+            index
+          ) {
+
+            slide.classList.toggle(
+              "active",
+              index === currentSlide
+            );
+
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".slide-thumbnail"
+        )
+        .forEach(
+          function (
+            thumbnail,
+            index
+          ) {
+
+            thumbnail.classList.toggle(
+              "active",
+              index === currentSlide
+            );
+
+          }
+        );
+
+    }
+
+
+    // ======================================
+    // SHOW SLIDE
+    // ======================================
+
+    function showSlide(
+      index
+    ) {
+
+      if (
+        slides.length === 0
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        index < 0
+      ) {
+
+        index = 0;
+
+      }
+
+
+      if (
+        index >= slides.length
+      ) {
+
+        index =
+          slides.length - 1;
+
+      }
+
+
+      currentSlide =
+        index;
+
+
+      updateSlideUI();
+
+    }
+
+
+    // ======================================
+    // NEXT
+    // ======================================
+
+    function nextSlide() {
+
+      if (
+        currentSlide <
+        slides.length - 1
+      ) {
+
+        currentSlide++;
+
+        updateSlideUI();
+
+      }
+
+    }
+
+
+    // ======================================
+    // PREVIOUS
+    // ======================================
+
+    function previousSlide() {
+
+      if (
+        currentSlide > 0
+      ) {
+
+        currentSlide--;
+
+        updateSlideUI();
+
+      }
+
+    }
+
+
+    // ======================================
+    // EDIT MODE
+    // ======================================
+
+    function setEditMode(
+      enabled
+    ) {
+
+      isEditMode =
+        enabled;
+
+
+      document
+        .querySelectorAll(
+          ".slide-title, .slide-text"
+        )
+        .forEach(
+          function (
+            element
+          ) {
+
+            element.contentEditable =
+              enabled
+                ? "true"
+                : "false";
+
+          }
+        );
+
+
+      if (editBtn) {
+
+        editBtn.textContent =
+          enabled
+            ? "🔒 Lock"
+            : "✏️ Edit";
+
+      }
+
+
+      setStatus(
+        enabled
+          ? "✏️ Edit mode aktif"
+          : "🔒 Editing locked"
+      );
+
+    }
+
+
+    // ======================================
+    // EDIT BUTTON
+    // ======================================
+
+    if (editBtn) {
+
+      editBtn.addEventListener(
+        "click",
+        function () {
+
+          setEditMode(
+            !isEditMode
+          );
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // ADD SLIDE
+    // ======================================
+
+    function addNewSlide() {
+
+      slides.push({
+
+        title:
+          "Slide " +
+          (slides.length + 1),
+
+        content:
+          "Add your content here."
+
+      });
+
+
+      currentSlide =
+        slides.length - 1;
+
+
+      saveLocalSlides();
+
+      renderSlides();
+
+      setStatus(
+        "➕ Slide ditambah"
+      );
+
+
+      scheduleAutoSave();
+
+    }
+
+
+    if (addSlideBtn) {
+
+      addSlideBtn.addEventListener(
+        "click",
+        addNewSlide
+      );
+
+    }
+
+
+    if (newSlideSmallBtn) {
+
+      newSlideSmallBtn.addEventListener(
+        "click",
+        addNewSlide
+      );
+
+    }
+
+
+    // ======================================
+    // DELETE SLIDE
+    // ======================================
+
+    if (deleteSlideBtn) {
+
+      deleteSlideBtn.addEventListener(
+        "click",
+        function () {
+
+          if (
+            slides.length <= 1
+          ) {
+
+            alert(
+              "Mesti ada sekurang-kurangnya 1 slide."
+            );
+
+            return;
+
+          }
+
+
+          const confirmed =
+            window.confirm(
+              "Padam Slide " +
+              (currentSlide + 1) +
+              "?"
+            );
+
+
+          if (!confirmed) {
+
+            return;
+
+          }
+
+
+          slides.splice(
+            currentSlide,
+            1
+          );
+
+
+          if (
+            currentSlide >=
+            slides.length
+          ) {
+
+            currentSlide =
+              slides.length - 1;
+
+          }
+
+
+          saveLocalSlides();
+
+          renderSlides();
+
+
+          setStatus(
+            "🗑️ Slide dipadam"
+          );
+
+
+          scheduleAutoSave();
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // IMAGE
+    // ======================================
+
+    if (
+      addImageBtn &&
+      imageInput
+    ) {
+
+      addImageBtn.addEventListener(
+        "click",
+        function () {
+
+          imageInput.click();
+
+        }
+      );
+
+
+      imageInput.addEventListener(
+        "change",
+        function (event) {
+
+          const file =
+            event.target.files[0];
+
+
+          if (!file) {
+
+            return;
+
+          }
+
+
+          if (
+            !file.type.startsWith(
+              "image/"
+            )
+          ) {
+
+            alert(
+              "Sila pilih fail gambar."
+            );
+
+            return;
+
+          }
+
+
+          const reader =
+            new FileReader();
+
+
+          reader.onload =
+            function () {
+
+              if (
+                !slides[currentSlide]
+              ) {
+
+                return;
+
+              }
+
+
+              const imageHTML =
+                '<div style="' +
+                'text-align:center;' +
+                'margin:25px 0;">' +
+
+                '<img ' +
+                'src="' +
+                reader.result +
+                '" ' +
+                'alt="Presentation image" ' +
+                'style="' +
+                'max-width:100%;' +
+                'max-height:330px;' +
+                'border-radius:12px;' +
+                'object-fit:contain;">' +
+
+                "</div>";
+
+
+              slides[currentSlide].content +=
+                imageHTML;
+
+
+              saveLocalSlides();
+
+              renderSlides();
+
+
+              setStatus(
+                "🖼️ Image ditambah"
+              );
+
+
+              scheduleAutoSave();
+
+            };
+
+
+          reader.readAsDataURL(
+            file
+          );
+
+
+          imageInput.value =
+            "";
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // SAVE
+    // ======================================
+
+    async function savePresentation() {
+
+      saveLocalSlides();
+
+
+      if (!supabaseClient) {
+
+        setStatus(
+          "💾 Saved locally"
+        );
+
+        return;
+
+      }
+
+
+      setStatus(
+        "☁️ Saving..."
+      );
+
+
+      const title =
+        slides[0] &&
+        slides[0].title
+          ? slides[0].title.trim()
+          : "Untitled Presentation";
+
+
+      const data = {
+
+        title:
+          title,
+
+        content:
+          JSON.stringify(
+            slides
+          )
+
+      };
+
+
+      try {
+
+        let result;
+
+
+        if (
+          currentPresentationId
+        ) {
+
+          result =
+            await supabaseClient
+              .from("works")
+              .update(data)
+              .eq(
+                "id",
+                currentPresentationId
+              )
+              .select()
+              .single();
+
+        } else {
+
+          result =
+            await supabaseClient
+              .from("works")
+              .insert(data)
+              .select()
+              .single();
+
+        }
+
+
+        if (result.error) {
+
+          throw result.error;
+
+        }
+
+
+        currentPresentationId =
+          result.data.id;
+
+
+        setStatus(
+          "☁️✅ Saved to Cloud"
+        );
+
+
+        loadCloudPresentations();
+
+      } catch (error) {
+
+        console.error(
+          "Save error:",
+          error
+        );
+
+
+        setStatus(
+          "⚠️ Saved locally"
+        );
+
+      }
+
+    }
+
+
+    if (saveBtn) {
+
+      saveBtn.addEventListener(
+        "click",
+        function () {
+
+          savePresentation();
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // AUTO SAVE
+    // ======================================
+
+    function scheduleAutoSave() {
+
+      clearTimeout(
+        autoSaveTimer
+      );
+
+
+      autoSaveTimer =
+        setTimeout(
+          function () {
+
+            if (
+              currentPresentationId
+            ) {
+
+              savePresentation();
+
+            }
+
+          },
+          2000
+        );
+
+    }
+
+
+    // ======================================
+    // CLOUD LIST
+    // ======================================
+
+    async function loadCloudPresentations() {
+
+      if (
+        !supabaseClient ||
+        !savedPresentations
+      ) {
+
+        return;
+
+      }
+
+
+      savedPresentations.innerHTML =
+        "☁️ Loading...";
+
+
+      try {
+
+        const response =
+          await supabaseClient
+            .from("works")
+            .select("*")
+            .order(
+              "created_at",
+              {
+                ascending:
+                  false
+              }
+            );
+
+
+        if (response.error) {
+
+          throw response.error;
+
+        }
+
+
+        const data =
+          response.data;
+
+
+        if (
+          !data ||
+          data.length === 0
+        ) {
+
+          savedPresentations.innerHTML =
+            "Belum ada presentation disimpan.";
+
+          return;
+
+        }
+
+
+        savedPresentations.innerHTML =
+          "";
+
+
+        data.forEach(
+          function (
+            presentation
+          ) {
+
+            const card =
+              document.createElement(
+                "div"
+              );
+
+
+            card.className =
+              "cloud-presentation";
+
+
+            const top =
+              document.createElement(
+                "div"
+              );
+
+
+            const title =
+              document.createElement(
+                "strong"
+              );
+
+
+            title.textContent =
+              presentation.title ||
+              "Untitled";
+
+
+            const date =
+              document.createElement(
+                "small"
+              );
+
+
+            date.textContent =
+              formatDate(
+                presentation.created_at
+              );
+
+
+            top.appendChild(
+              title
+            );
+
+
+            top.appendChild(
+              date
+            );
+
+
+            const actions =
+              document.createElement(
+                "div"
+              );
+
+
+            // BUKA
+
+            const openButton =
+              document.createElement(
+                "button"
+              );
+
+
+            openButton.type =
+              "button";
+
+
+            openButton.className =
+              "open-cloud-btn";
+
+
+            openButton.textContent =
+              "📂 Buka";
+
+
+            openButton.addEventListener(
+              "click",
+              function () {
+
+                openCloudPresentation(
+                  presentation
+                );
+
+              }
+            );
+
+
+            // EDIT
+
+            const editCloudButton =
+              document.createElement(
+                "button"
+              );
+
+
+            editCloudButton.type =
+              "button";
+
+
+            editCloudButton.className =
+              "edit-cloud-btn";
+
+
+            editCloudButton.textContent =
+              "✏️ Edit";
+
+
+            editCloudButton.addEventListener(
+              "click",
+              function () {
+
+                editCloudPresentation(
+                  presentation
+                );
+
+              }
+            );
+
+
+            // DELETE
+
+            const deleteButton =
+              document.createElement(
+                "button"
+              );
+
+
+            deleteButton.type =
+              "button";
+
+
+            deleteButton.className =
+              "delete-cloud-btn";
+
+
+            deleteButton.textContent =
+              "🗑️ Padam";
+
+
+            deleteButton.addEventListener(
+              "click",
+              function () {
+
+                deleteCloudPresentation(
+                  presentation.id
+                );
+
+              }
+            );
+
+
+            actions.appendChild(
+              openButton
+            );
+
+
+            actions.appendChild(
+              editCloudButton
+            );
+
+
+            actions.appendChild(
+              deleteButton
+            );
+
+
+            card.appendChild(
+              top
+            );
+
+
+            card.appendChild(
+              actions
+            );
+
+
+            savedPresentations.appendChild(
+              card
+            );
+
+          }
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Cloud error:",
+          error
+        );
+
+
+        savedPresentations.innerHTML =
+          "⚠️ Cloud gagal dimuat.";
+
+      }
+
+    }
+
+
+    // ======================================
+    // OPEN CLOUD
+    // ======================================
+
+    function openCloudPresentation(
+      presentation
+    ) {
+
+      try {
+
+        currentPresentationId =
+          presentation.id;
+
+
+        const parsed =
+          JSON.parse(
+            presentation.content
+          );
+
+
+        if (
+          !Array.isArray(parsed)
+        ) {
+
+          throw new Error(
+            "Invalid presentation"
+          );
+
+        }
+
+
+        slides =
+          parsed;
+
+
+        currentSlide =
+          0;
+
+
+        saveLocalSlides();
+
+        setEditMode(false);
+
+        renderSlides();
+
+
+        setStatus(
+          "📂 Presentation dibuka"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Open error:",
+          error
+        );
+
+
+        alert(
+          "Gagal buka presentation."
+        );
+
+      }
+
+    }
+
+
+    // ======================================
+    // EDIT CLOUD
+    // ======================================
+
+    function editCloudPresentation(
+      presentation
+    ) {
+
+      try {
+
+        currentPresentationId =
+          presentation.id;
+
+
+        const parsed =
+          JSON.parse(
+            presentation.content
+          );
+
+
+        if (
+          !Array.isArray(parsed)
+        ) {
+
+          throw new Error(
+            "Invalid presentation"
+          );
+
+        }
+
+
+        slides =
+          parsed;
+
+
+        currentSlide =
+          0;
+
+
+        saveLocalSlides();
+
+        setEditMode(true);
+
+        renderSlides();
+
+
+        setStatus(
+          "✏️ Presentation sedang diedit"
+        );
+
+
+        if (editor) {
+
+          editor.scrollIntoView({
+            behavior:
+              "smooth",
+
+            block:
+              "start"
+          });
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Edit error:",
+          error
+        );
+
+
+        alert(
+          "Gagal edit presentation."
+        );
+
+      }
+
+    }
+
+
+    // ======================================
+    // DELETE CLOUD
+    // ======================================
+
+    async function deleteCloudPresentation(
+      id
+    ) {
+
+      const confirmed =
+        window.confirm(
+          "Padam presentation ini dari Cloud?"
+        );
+
+
+      if (!confirmed) {
+
+        return;
+
+      }
+
+
+      if (!supabaseClient) {
+
+        setStatus(
+          "⚠️ Cloud tidak tersedia"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const response =
+          await supabaseClient
+            .from("works")
+            .delete()
+            .eq(
+              "id",
+              id
+            );
+
+
+        if (response.error) {
+
+          throw response.error;
+
+        }
+
+
+        if (
+          String(
+            currentPresentationId
+          ) ===
+          String(id)
+        ) {
+
+          currentPresentationId =
+            null;
+
+        }
+
+
+        setStatus(
+          "🗑️ Presentation dipadam"
+        );
+
+
+        loadCloudPresentations();
+
+      } catch (error) {
+
+        console.error(
+          "Delete error:",
+          error
+        );
+
+
+        alert(
+          "Gagal padam presentation."
+        );
+
+      }
+
+    }
+
+
+    // ======================================
+    // REFRESH CLOUD
+    // ======================================
+
+    if (refreshCloudBtn) {
+
+      refreshCloudBtn.addEventListener(
+        "click",
+        function () {
+
+          loadCloudPresentations();
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // NORMAL ARROWS
+    // ======================================
+
+    if (previousBtn) {
+
+      previousBtn.addEventListener(
+        "click",
+        previousSlide
+      );
+
+    }
+
+
+    if (nextBtn) {
+
+      nextBtn.addEventListener(
+        "click",
+        nextSlide
+      );
+
+    }
+
+
+    // ======================================
+    // PRESENT
+    // ======================================
+
+    function startPresentation() {
+
+      document.body.classList.add(
+        "presentation-mode"
+      );
+
+
+      showSlide(
+        currentSlide
+      );
+
+
+      if (presentationNavigation) {
+
+        presentationNavigation.style.display =
+          "flex";
+
+      }
+
+
+      setStatus(
+        "▶ Presentation mode"
+      );
+
+    }
+
+
+    // ======================================
+    // STOP
+    // ======================================
+
+    function stopPresentation() {
+
+      document.body.classList.remove(
+        "presentation-mode"
+      );
+
+
+      if (presentationNavigation) {
+
+        presentationNavigation.style.display =
+          "";
+
+      }
+
+
+      setStatus(
+        "✕ Presentation stopped"
+      );
+
+    }
+
+
+    if (presentBtn) {
+
+      presentBtn.addEventListener(
+        "click",
+        function () {
+
+          startPresentation();
+
+        }
+      );
+
+    }
+
+
+    if (stopBtn) {
+
+      stopBtn.addEventListener(
+        "click",
+        function () {
+
+          stopPresentation();
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // PRESENT LEFT
+    // ======================================
+
+    if (presentationPrevBtn) {
+
+      presentationPrevBtn.addEventListener(
+        "click",
+        function (event) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          previousSlide();
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // PRESENT RIGHT
+    // ======================================
+
+    if (presentationNextBtn) {
+
+      presentationNextBtn.addEventListener(
+        "click",
+        function (event) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          nextSlide();
+
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // KEYBOARD
+    // ======================================
+
+    document.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          stopPresentation();
+
+          return;
+
+        }
+
+
+        const editing =
+          event.target &&
+          event.target.isContentEditable;
+
+
+        if (
+          editing &&
+          !document.body.classList.contains(
+            "presentation-mode"
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          event.key ===
+          "ArrowRight"
+        ) {
+
+          nextSlide();
+
+        }
+
+
+        if (
+          event.key ===
+          "ArrowLeft"
+        ) {
+
+          previousSlide();
+
+        }
+
+      }
+    );
+
+
+    // ======================================
+    // DATE
+    // ======================================
+
+    function formatDate(
+      dateString
+    ) {
+
+      if (!dateString) {
+
+        return "";
+
+      }
+
+
+      const date =
+        new Date(
+          dateString
+        );
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return "";
+
+      }
+
+
+      return date.toLocaleString(
+        "ms-MY",
+        {
+          day:
+            "2-digit",
+
+          month:
+            "short",
+
+          year:
+            "numeric",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit"
+        }
+      );
+
+    }
+
+
+    // ======================================
+    // START APP
+    // ======================================
+
+    function initialize() {
+
+      loadLocalSlides();
+
+
+      currentSlide =
+        0;
+
+
+      renderSlides();
+
+
+      setEditMode(
+        true
+      );
+
+
+      if (supabaseClient) {
+
+        loadCloudPresentations();
+
+      } else {
+
+        setStatus(
+          "💾 Local mode"
+        );
+
+      }
+
+    }
+
+
+    initialize();
+
+  </script>
 
 </body>
 
