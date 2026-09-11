@@ -3,6 +3,7 @@
 <html lang="ms">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -14,11 +15,14 @@
 
   <link
     rel="stylesheet"
-    href="style.css?v=3"
+    href="style.css?v=4"
   >
+
 </head>
 
+
 <body>
+
 
   <!-- ================================= -->
   <!-- TOP BAR -->
@@ -26,11 +30,15 @@
 
   <header class="topbar">
 
+
+    <!-- BRAND -->
+
     <div class="brand">
 
       <div class="brand-icon">
         P
       </div>
+
 
       <div class="brand-text">
 
@@ -47,56 +55,82 @@
     </div>
 
 
+    <!-- ================================= -->
+    <!-- ALL MAIN BUTTONS -->
+    <!-- ================================= -->
+
     <div class="toolbar">
+
+
+      <!-- EDIT -->
 
       <button
         id="editBtn"
-        class="edit-btn">
+        class="edit-btn"
+      >
 
         ✏️ Edit
 
       </button>
 
 
+      <!-- SAVE -->
+
       <button
         id="saveBtn"
-        class="primary-btn">
+        class="primary-btn"
+      >
 
         💾 Save
 
       </button>
 
 
-      <button id="addImageBtn">
+      <!-- IMAGE -->
+
+      <button
+        id="addImageBtn"
+      >
 
         🖼️ Image
 
       </button>
 
 
-      <button id="addSlideBtn">
+      <!-- ADD SLIDE -->
+
+      <button
+        id="addSlideBtn"
+      >
 
         ＋ Slide
 
       </button>
 
 
+      <!-- DELETE SLIDE -->
+
       <button
         id="deleteSlideBtn"
-        class="danger-btn">
+        class="danger-btn"
+      >
 
         🗑️ Delete
 
       </button>
 
 
+      <!-- PRESENT -->
+
       <button
         id="presentBtn"
-        class="present-btn">
+        class="present-btn"
+      >
 
         ▶ Present
 
       </button>
+
 
     </div>
 
@@ -104,7 +138,7 @@
 
 
   <!-- ================================= -->
-  <!-- WORKSPACE -->
+  <!-- MAIN WORKSPACE -->
   <!-- ================================= -->
 
   <main class="workspace">
@@ -116,13 +150,18 @@
 
     <aside class="slide-sidebar">
 
+
+      <!-- SIDEBAR HEADER -->
+
       <div class="sidebar-title">
+
 
         <div>
 
           <strong>
             Slides
           </strong>
+
 
           <small id="slideNumber">
             1 / 1
@@ -131,19 +170,26 @@
         </div>
 
 
+        <!-- SMALL ADD BUTTON -->
+
         <button
           id="newSlideSmallBtn"
-          class="small-add-btn">
+          class="small-add-btn"
+        >
 
           ＋
 
         </button>
 
+
       </div>
 
+
+      <!-- SLIDE THUMBNAILS -->
 
       <div id="slideThumbnails">
       </div>
+
 
     </aside>
 
@@ -155,13 +201,17 @@
     <section class="editor-area">
 
 
+      <!-- EDITOR HEADER -->
+
       <div class="editor-top">
+
 
         <div>
 
           <span class="editor-label">
             EDITOR
           </span>
+
 
           <h1>
             Presentation Editor
@@ -170,77 +220,104 @@
         </div>
 
 
+        <!-- SAVE STATUS -->
+
         <div id="saveStatus">
           Ready
         </div>
 
+
       </div>
 
 
+      <!-- ================================= -->
+      <!-- SLIDE CANVAS -->
+      <!-- ================================= -->
+
       <div id="editor">
+
 
         <div id="slideContainer">
         </div>
 
+
       </div>
 
 
       <!-- ================================= -->
-      <!-- NORMAL NAVIGATION -->
+      <!-- NORMAL SLIDE CONTROLS -->
       <!-- ================================= -->
 
       <div class="slide-controls">
 
+
+        <!-- PREVIOUS -->
+
         <button
           id="previousBtn"
-          class="navigation-btn">
+          class="navigation-btn"
+        >
 
           ←
 
         </button>
 
 
+        <!-- COUNTER -->
+
         <span id="slideCounter">
           1 / 1
         </span>
 
 
+        <!-- NEXT -->
+
         <button
           id="nextBtn"
-          class="navigation-btn">
+          class="navigation-btn"
+        >
 
           →
 
         </button>
 
 
+        <!-- STOP -->
+
         <button
           id="stopBtn"
-          class="stop-btn">
+          class="stop-btn"
+        >
 
           ✕ Stop
 
         </button>
 
+
       </div>
+
 
     </section>
 
 
     <!-- ================================= -->
-    <!-- CLOUD -->
+    <!-- CLOUD PANEL -->
     <!-- ================================= -->
 
     <aside id="cloudSection">
 
 
+      <!-- CLOUD HEADER -->
+
       <div class="cloud-header">
+
 
         <div>
 
           <span class="cloud-label">
             CLOUD
           </span>
+
 
           <h2>
             ☁️ My Presentations
@@ -249,16 +326,22 @@
         </div>
 
 
+        <!-- REFRESH -->
+
         <button
           id="refreshCloudBtn"
-          class="refresh-btn">
+          class="refresh-btn"
+        >
 
           ↻
 
         </button>
 
+
       </div>
 
+
+      <!-- DESCRIPTION -->
 
       <p class="cloud-description">
 
@@ -269,22 +352,30 @@
       </p>
 
 
+      <!-- CLOUD STATUS -->
+
       <div class="cloud-status">
 
         <span class="status-dot">
         </span>
+
 
         Cloud connected
 
       </div>
 
 
+      <!-- SAVED PRESENTATIONS -->
+
       <div id="savedPresentations">
+
         Loading...
+
       </div>
 
 
     </aside>
+
 
   </main>
 
@@ -302,27 +393,36 @@
 
 
   <!-- ================================= -->
-  <!-- PRESENTATION CENTER NAVIGATION -->
+  <!-- PRESENTATION NAVIGATION -->
+  <!-- ONLY APPEARS DURING PRESENT -->
   <!-- ================================= -->
 
   <div id="presentationNavigation">
 
+
+    <!-- PRESENT PREVIOUS -->
+
     <button
       id="presentationPrevBtn"
-      aria-label="Previous slide">
+      aria-label="Previous slide"
+    >
 
       ←
 
     </button>
 
 
+    <!-- PRESENT NEXT -->
+
     <button
       id="presentationNextBtn"
-      aria-label="Next slide">
+      aria-label="Next slide"
+    >
 
       →
 
     </button>
+
 
   </div>
 
@@ -332,15 +432,16 @@
   <!-- ================================= -->
 
   <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-  </script>
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
 
 
   <!-- ================================= -->
-  <!-- APP -->
+  <!-- APPLICATION SCRIPT -->
   <!-- ================================= -->
 
   <script src="script.js"></script>
+
 
 </body>
 
