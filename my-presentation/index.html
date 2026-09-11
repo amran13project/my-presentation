@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html lang="ms">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>Presentation Cloud</title>
 
-  <title>My Presentation</title>
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 
 <body>
 
   <!-- ============================= -->
-  <!-- HEADER -->
+  <!-- TOP BAR -->
   <!-- ============================= -->
 
   <header class="topbar">
 
-    <div class="logo">
-      📊 My Presentation
+    <div class="brand">
+
+      <div class="brand-icon">
+        P
+      </div>
+
+      <div class="brand-text">
+        <strong>Presentation</strong>
+        <span>Cloud Workspace</span>
+      </div>
+
     </div>
+
 
     <div class="toolbar">
 
-      <button id="saveBtn">
+      <button
+        id="editBtn"
+        class="edit-btn">
+        ✏️ Edit
+      </button>
+
+      <button
+        id="saveBtn"
+        class="primary-btn">
         💾 Save
       </button>
 
@@ -36,15 +51,19 @@
       </button>
 
       <button id="addSlideBtn">
-        ➕ Slide
+        ＋ Slide
       </button>
 
-      <button id="deleteSlideBtn">
+      <button
+        id="deleteSlideBtn"
+        class="danger-btn">
         🗑️ Delete
       </button>
 
-      <button id="presentBtn">
-        ▶️ Present
+      <button
+        id="presentBtn"
+        class="present-btn">
+        ▶ Present
       </button>
 
     </div>
@@ -53,12 +72,75 @@
 
 
   <!-- ============================= -->
-  <!-- MAIN EDITOR -->
+  <!-- WORKSPACE -->
   <!-- ============================= -->
 
-  <main class="main-container">
+  <main class="workspace">
+
+
+    <!-- ============================= -->
+    <!-- LEFT SIDEBAR -->
+    <!-- ============================= -->
+
+    <aside class="slide-sidebar">
+
+      <div class="sidebar-title">
+
+        <div>
+
+          <strong>Slides</strong>
+
+          <small id="slideNumber">
+            1 / 1
+          </small>
+
+        </div>
+
+        <button
+          id="newSlideSmallBtn"
+          class="small-add-btn">
+          ＋
+        </button>
+
+      </div>
+
+
+      <div id="slideThumbnails">
+      </div>
+
+    </aside>
+
+
+    <!-- ============================= -->
+    <!-- EDITOR -->
+    <!-- ============================= -->
 
     <section class="editor-area">
+
+
+      <div class="editor-top">
+
+        <div>
+
+          <span class="editor-label">
+            EDITOR
+          </span>
+
+          <h1>
+            Presentation Editor
+          </h1>
+
+        </div>
+
+
+        <div id="saveStatus">
+          Ready
+        </div>
+
+      </div>
+
+
+      <!-- CANVAS -->
 
       <div id="editor">
 
@@ -74,67 +156,90 @@
 
       <div class="slide-controls">
 
-        <button id="previousBtn">
-          ◀
+        <button
+          id="previousBtn"
+          class="navigation-btn">
+          ←
         </button>
 
-        <span id="slideNumber">
+
+        <span id="slideCounter">
           1 / 1
         </span>
 
-        <button id="nextBtn">
-          ▶
+
+        <button
+          id="nextBtn"
+          class="navigation-btn">
+          →
         </button>
 
-        <button id="stopBtn">
+
+        <button
+          id="stopBtn"
+          class="stop-btn">
           ✕ Stop
         </button>
 
       </div>
 
 
-      <!-- ============================= -->
-      <!-- SAVE STATUS -->
-      <!-- ============================= -->
-
-      <div id="saveStatus">
-        Ready
-      </div>
-
     </section>
 
 
     <!-- ============================= -->
-    <!-- CLOUD SAVE -->
+    <!-- CLOUD -->
     <!-- ============================= -->
 
     <aside id="cloudSection">
 
+
       <div class="cloud-header">
 
-        <h2>
-          ☁️ Cloud Save
-        </h2>
+        <div>
 
-        <button id="refreshCloudBtn">
-          🔄
+          <span class="cloud-label">
+            CLOUD
+          </span>
+
+          <h2>
+            ☁️ My Presentations
+          </h2>
+
+        </div>
+
+
+        <button
+          id="refreshCloudBtn"
+          class="refresh-btn">
+          ↻
         </button>
 
       </div>
 
 
       <p class="cloud-description">
-        Simpan presentation anda ke Cloud
-        dan buka semula pada laptop,
-        telefon atau tablet.
+
+        Simpan, buka dan edit
+        presentation anda dari
+        mana-mana peranti.
+
       </p>
 
 
-      <div id="savedPresentations">
+      <div class="cloud-status">
 
-        Loading...
+        <span class="status-dot"></span>
+
+        Cloud connected
 
       </div>
+
+
+      <div id="savedPresentations">
+        Loading...
+      </div>
+
 
     </aside>
 
@@ -149,8 +254,7 @@
     type="file"
     id="imageInput"
     accept="image/*"
-    hidden
-  >
+    hidden>
 
 
   <!-- ============================= -->
@@ -163,10 +267,11 @@
 
 
   <!-- ============================= -->
-  <!-- APP SCRIPT -->
+  <!-- APP -->
   <!-- ============================= -->
 
   <script src="script.js"></script>
 
 </body>
+
 </html>
