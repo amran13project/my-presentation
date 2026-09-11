@@ -1,4 +1,3 @@
-```javascript
 // ==========================================
 // PRESENTATION CLOUD WORKSPACE
 // FULL SCRIPT
@@ -18,11 +17,10 @@ const SUPABASE_KEY =
 let supabaseClient = null;
 
 if (window.supabase) {
-  supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 }
 
 
@@ -31,28 +29,18 @@ if (window.supabase) {
 // ==========================================
 
 const defaultSlides = [
-
   {
     title: "My Presentation",
-
-    content:
-      "Welcome to my presentation!"
+    content: "Welcome to my presentation!"
   },
-
   {
     title: "Slide 2",
-
-    content:
-      "Add your content here."
+    content: "Add your content here."
   },
-
   {
     title: "Slide 3",
-
-    content:
-      "You can edit this slide."
+    content: "You can edit this slide."
   }
-
 ];
 
 
@@ -61,13 +49,9 @@ const defaultSlides = [
 // ==========================================
 
 let slides = [];
-
 let currentSlide = 0;
-
 let currentPresentationId = null;
-
 let isEditMode = true;
-
 let autoSaveTimer = null;
 
 
@@ -76,103 +60,65 @@ let autoSaveTimer = null;
 // ==========================================
 
 const editor =
-  document.getElementById(
-    "editor"
-  );
+  document.getElementById("editor");
 
 const slideContainer =
-  document.getElementById(
-    "slideContainer"
-  );
+  document.getElementById("slideContainer");
 
 const slideThumbnails =
-  document.getElementById(
-    "slideThumbnails"
-  );
+  document.getElementById("slideThumbnails");
 
 const slideNumber =
-  document.getElementById(
-    "slideNumber"
-  );
+  document.getElementById("slideNumber");
 
 const slideCounter =
-  document.getElementById(
-    "slideCounter"
-  );
+  document.getElementById("slideCounter");
 
 const saveStatus =
-  document.getElementById(
-    "saveStatus"
-  );
+  document.getElementById("saveStatus");
 
 const previousBtn =
-  document.getElementById(
-    "previousBtn"
-  );
+  document.getElementById("previousBtn");
 
 const nextBtn =
-  document.getElementById(
-    "nextBtn"
-  );
+  document.getElementById("nextBtn");
 
 const stopBtn =
-  document.getElementById(
-    "stopBtn"
-  );
+  document.getElementById("stopBtn");
 
 const saveBtn =
-  document.getElementById(
-    "saveBtn"
-  );
+  document.getElementById("saveBtn");
 
 const editBtn =
-  document.getElementById(
-    "editBtn"
-  );
+  document.getElementById("editBtn");
 
 const addImageBtn =
-  document.getElementById(
-    "addImageBtn"
-  );
+  document.getElementById("addImageBtn");
 
 const addSlideBtn =
-  document.getElementById(
-    "addSlideBtn"
-  );
+  document.getElementById("addSlideBtn");
 
 const newSlideSmallBtn =
-  document.getElementById(
-    "newSlideSmallBtn"
-  );
+  document.getElementById("newSlideSmallBtn");
 
 const deleteSlideBtn =
-  document.getElementById(
-    "deleteSlideBtn"
-  );
+  document.getElementById("deleteSlideBtn");
 
 const presentBtn =
-  document.getElementById(
-    "presentBtn"
-  );
+  document.getElementById("presentBtn");
 
 const imageInput =
-  document.getElementById(
-    "imageInput"
-  );
+  document.getElementById("imageInput");
 
 const refreshCloudBtn =
-  document.getElementById(
-    "refreshCloudBtn"
-  );
+  document.getElementById("refreshCloudBtn");
 
 const savedPresentations =
-  document.getElementById(
-    "savedPresentations"
-  );
+  document.getElementById("savedPresentations");
 
 
 // ==========================================
-// PRESENTATION NAVIGATION
+// PRESENTATION BUTTONS
 // ==========================================
 
 const presentationNavigation =
@@ -198,25 +144,20 @@ const presentationNextBtn =
 function setStatus(message) {
 
   if (saveStatus) {
-
-    saveStatus.textContent =
-      message;
-
+    saveStatus.textContent = message;
   }
 
 }
 
 
 // ==========================================
-// HTML ESCAPE
+// ESCAPE HTML
 // ==========================================
 
 function escapeHTML(text) {
 
   const div =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
   div.textContent =
     text ?? "";
@@ -227,15 +168,13 @@ function escapeHTML(text) {
 
 
 // ==========================================
-// REMOVE HTML FOR PREVIEW
+// REMOVE HTML
 // ==========================================
 
 function stripHTML(html) {
 
   const div =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
   div.innerHTML =
     html || "";
@@ -245,10 +184,7 @@ function stripHTML(html) {
     div.innerText ||
     ""
   )
-    .replace(
-      /\s+/g,
-      " "
-    )
+    .replace(/\s+/g, " ")
     .trim();
 
 }
@@ -288,7 +224,6 @@ function loadLocalSlides() {
         "myPresentationSlides"
       );
 
-
     if (!saved) {
 
       slides =
@@ -299,13 +234,10 @@ function loadLocalSlides() {
         );
 
       return;
-
     }
-
 
     const parsed =
       JSON.parse(saved);
-
 
     if (
       !Array.isArray(parsed) ||
@@ -320,16 +252,14 @@ function loadLocalSlides() {
         );
 
       return;
-
     }
-
 
     slides = parsed;
 
   } catch (error) {
 
     console.error(
-      "Local load error:",
+      "Load error:",
       error
     );
 
@@ -354,23 +284,15 @@ function renderSlides() {
   if (!slideContainer)
     return;
 
-
-  slideContainer.innerHTML =
-    "";
-
+  slideContainer.innerHTML = "";
 
   slides.forEach(
     (slide, index) => {
 
       const slideElement =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
-
-      slideElement.className =
-        "slide";
-
+      slideElement.className = "slide";
 
       if (
         index === currentSlide
@@ -382,82 +304,49 @@ function renderSlides() {
 
       }
 
-
       slideElement.dataset.index =
         index;
 
 
       const content =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       content.className =
         "slide-content";
 
 
-      // ------------------------------
       // TITLE
-      // ------------------------------
 
       const title =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       title.className =
         "slide-title";
 
-
       title.contentEditable =
-        isEditMode
-          ? "true"
-          : "false";
-
-
-      title.spellcheck =
-        true;
-
+        isEditMode ? "true" : "false";
 
       title.textContent =
         slide.title ||
         `Slide ${index + 1}`;
 
 
-      // ------------------------------
       // CONTENT
-      // ------------------------------
 
       const text =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       text.className =
         "slide-text";
 
-
       text.contentEditable =
-        isEditMode
-          ? "true"
-          : "false";
-
-
-      text.spellcheck =
-        true;
-
+        isEditMode ? "true" : "false";
 
       text.innerHTML =
-        slide.content ||
-        "";
+        slide.content || "";
 
 
-      // ------------------------------
-      // TITLE INPUT
-      // ------------------------------
+      // TITLE EDIT
 
       title.addEventListener(
         "input",
@@ -466,7 +355,6 @@ function renderSlides() {
           slides[index].title =
             title.textContent;
 
-
           saveLocalSlides();
 
           renderThumbnails();
@@ -477,9 +365,7 @@ function renderSlides() {
       );
 
 
-      // ------------------------------
-      // CONTENT INPUT
-      // ------------------------------
+      // CONTENT EDIT
 
       text.addEventListener(
         "input",
@@ -488,7 +374,6 @@ function renderSlides() {
           slides[index].content =
             text.innerHTML;
 
-
           saveLocalSlides();
 
           renderThumbnails();
@@ -499,20 +384,10 @@ function renderSlides() {
       );
 
 
-      content.appendChild(
-        title
-      );
+      content.appendChild(title);
+      content.appendChild(text);
 
-
-      content.appendChild(
-        text
-      );
-
-
-      slideElement.appendChild(
-        content
-      );
-
+      slideElement.appendChild(content);
 
       slideContainer.appendChild(
         slideElement
@@ -530,7 +405,7 @@ function renderSlides() {
 
 
 // ==========================================
-// RENDER THUMBNAILS
+// THUMBNAILS
 // ==========================================
 
 function renderThumbnails() {
@@ -538,19 +413,13 @@ function renderThumbnails() {
   if (!slideThumbnails)
     return;
 
-
-  slideThumbnails.innerHTML =
-    "";
-
+  slideThumbnails.innerHTML = "";
 
   slides.forEach(
     (slide, index) => {
 
       const thumbnail =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       thumbnail.className =
         "slide-thumbnail";
@@ -565,12 +434,6 @@ function renderThumbnails() {
         );
 
       }
-
-
-      const preview =
-        stripHTML(
-          slide.content
-        );
 
 
       thumbnail.innerHTML = `
@@ -590,7 +453,9 @@ function renderThumbnails() {
 
           <div class="thumbnail-text">
             ${escapeHTML(
-              preview ||
+              stripHTML(
+                slide.content
+              ) ||
               "Empty slide"
             )}
           </div>
@@ -621,16 +486,17 @@ function renderThumbnails() {
 
 
 // ==========================================
-// UPDATE UI
+// UPDATE SLIDE UI
 // ==========================================
 
 function updateSlideUI() {
 
+  const total =
+    slides.length;
+
   const counter =
-    `${currentSlide + 1} / ${slides.length}`;
+    `${currentSlide + 1} / ${total}`;
 
-
-  // Normal counter
 
   if (slideNumber) {
 
@@ -648,12 +514,12 @@ function updateSlideUI() {
   }
 
 
-  // Normal buttons
+  // NORMAL BUTTONS
 
   if (previousBtn) {
 
     previousBtn.disabled =
-      currentSlide <= 0;
+      currentSlide === 0;
 
   }
 
@@ -661,18 +527,17 @@ function updateSlideUI() {
   if (nextBtn) {
 
     nextBtn.disabled =
-      currentSlide >=
-      slides.length - 1;
+      currentSlide === total - 1;
 
   }
 
 
-  // Present buttons
+  // PRESENT BUTTONS
 
   if (presentationPrevBtn) {
 
     presentationPrevBtn.disabled =
-      currentSlide <= 0;
+      currentSlide === 0;
 
   }
 
@@ -680,18 +545,15 @@ function updateSlideUI() {
   if (presentationNextBtn) {
 
     presentationNextBtn.disabled =
-      currentSlide >=
-      slides.length - 1;
+      currentSlide === total - 1;
 
   }
 
 
-  // Slides
+  // SLIDES
 
   document
-    .querySelectorAll(
-      ".slide"
-    )
+    .querySelectorAll(".slide")
     .forEach(
       (slide, index) => {
 
@@ -704,7 +566,7 @@ function updateSlideUI() {
     );
 
 
-  // Thumbnails
+  // THUMBNAILS
 
   document
     .querySelectorAll(
@@ -731,7 +593,6 @@ function updateSlideUI() {
 function showSlide(index) {
 
   if (
-    !slides ||
     slides.length === 0
   ) {
 
@@ -759,7 +620,6 @@ function showSlide(index) {
 
   currentSlide =
     index;
-
 
   updateSlideUI();
 
@@ -793,7 +653,8 @@ function nextSlide() {
 function previousSlide() {
 
   if (
-    currentSlide > 0
+    currentSlide >
+    0
   ) {
 
     currentSlide--;
@@ -809,9 +670,7 @@ function previousSlide() {
 // EDIT MODE
 // ==========================================
 
-function setEditMode(
-  enabled
-) {
+function setEditMode(enabled) {
 
   isEditMode =
     enabled;
@@ -901,9 +760,6 @@ function addNewSlide() {
     "➕ Slide ditambah"
   );
 
-
-  scheduleAutoSave();
-
 }
 
 
@@ -928,70 +784,64 @@ if (newSlideSmallBtn) {
 
 
 // ==========================================
-// DELETE CURRENT SLIDE
+// DELETE SLIDE
 // ==========================================
-
-function deleteCurrentSlide() {
-
-  if (
-    slides.length <= 1
-  ) {
-
-    alert(
-      "Mesti ada sekurang-kurangnya 1 slide."
-    );
-
-    return;
-
-  }
-
-
-  const confirmed =
-    confirm(
-      `Padam Slide ${currentSlide + 1}?`
-    );
-
-
-  if (!confirmed)
-    return;
-
-
-  slides.splice(
-    currentSlide,
-    1
-  );
-
-
-  if (
-    currentSlide >=
-    slides.length
-  ) {
-
-    currentSlide =
-      slides.length - 1;
-
-  }
-
-
-  saveLocalSlides();
-
-  renderSlides();
-
-  setStatus(
-    "🗑️ Slide dipadam"
-  );
-
-
-  scheduleAutoSave();
-
-}
-
 
 if (deleteSlideBtn) {
 
   deleteSlideBtn.addEventListener(
     "click",
-    deleteCurrentSlide
+    () => {
+
+      if (
+        slides.length <= 1
+      ) {
+
+        alert(
+          "Mesti ada sekurang-kurangnya 1 slide."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !confirm(
+          `Padam Slide ${currentSlide + 1}?`
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      slides.splice(
+        currentSlide,
+        1
+      );
+
+
+      if (
+        currentSlide >= slides.length
+      ) {
+
+        currentSlide =
+          slides.length - 1;
+
+      }
+
+
+      saveLocalSlides();
+
+      renderSlides();
+
+      setStatus(
+        "🗑️ Slide dipadam"
+      );
+
+    }
   );
 
 }
@@ -1035,11 +885,8 @@ if (
       ) {
 
         alert(
-          "Sila pilih fail gambar."
+          "Sila pilih gambar."
         );
-
-        imageInput.value =
-          "";
 
         return;
 
@@ -1053,41 +900,26 @@ if (
       reader.onload =
         () => {
 
-          if (
-            !slides[currentSlide]
-          ) {
-
-            return;
-
-          }
-
-
-          const imageHTML = `
+          slides[currentSlide].content += `
 
             <div style="
-              width:100%;
               text-align:center;
               margin:25px 0;
             ">
 
               <img
                 src="${reader.result}"
-                alt="Presentation image"
+                alt="Image"
                 style="
                   max-width:100%;
                   max-height:330px;
                   border-radius:12px;
-                  object-fit:contain;
                 "
               >
 
             </div>
 
           `;
-
-
-          slides[currentSlide].content +=
-            imageHTML;
 
 
           saveLocalSlides();
@@ -1097,9 +929,6 @@ if (
           setStatus(
             "🖼️ Image ditambah"
           );
-
-
-          scheduleAutoSave();
 
         };
 
@@ -1124,10 +953,13 @@ if (
 
 async function savePresentation() {
 
+  saveLocalSlides();
+
+
   if (!supabaseClient) {
 
     setStatus(
-      "❌ Supabase tidak tersedia"
+      "⚠️ Supabase tidak tersedia"
     );
 
     return;
@@ -1135,31 +967,27 @@ async function savePresentation() {
   }
 
 
-  saveLocalSlides();
-
-
   setStatus(
     "☁️ Saving..."
   );
 
 
-  const title =
-    slides[0]?.title?.trim() ||
-    "Untitled Presentation";
+  const data = {
 
+    title:
+      slides[0]?.title?.trim() ||
+      "Untitled Presentation",
 
-  const content =
-    JSON.stringify(
-      slides
-    );
+    content:
+      JSON.stringify(slides)
+
+  };
 
 
   try {
 
     let result;
 
-
-    // UPDATE EXISTING
 
     if (
       currentPresentationId
@@ -1168,15 +996,7 @@ async function savePresentation() {
       result =
         await supabaseClient
           .from("works")
-          .update({
-
-            title:
-              title,
-
-            content:
-              content
-
-          })
+          .update(data)
           .eq(
             "id",
             currentPresentationId
@@ -1184,25 +1004,12 @@ async function savePresentation() {
           .select()
           .single();
 
-    }
-
-
-    // CREATE NEW
-
-    else {
+    } else {
 
       result =
         await supabaseClient
           .from("works")
-          .insert({
-
-            title:
-              title,
-
-            content:
-              content
-
-          })
+          .insert(data)
           .select()
           .single();
 
@@ -1225,7 +1032,8 @@ async function savePresentation() {
     );
 
 
-    await loadCloudPresentations();
+    loadCloudPresentations();
+
 
   } catch (error) {
 
@@ -1239,19 +1047,10 @@ async function savePresentation() {
       "❌ Save gagal"
     );
 
-
-    console.error(
-      error.message
-    );
-
   }
 
 }
 
-
-// ==========================================
-// SAVE BUTTON
-// ==========================================
 
 if (saveBtn) {
 
@@ -1278,8 +1077,6 @@ function scheduleAutoSave() {
     setTimeout(
       () => {
 
-        // Only auto-update an existing Cloud presentation
-
         if (
           currentPresentationId
         ) {
@@ -1296,7 +1093,7 @@ function scheduleAutoSave() {
 
 
 // ==========================================
-// CLOUD LOAD
+// CLOUD LIST
 // ==========================================
 
 async function loadCloudPresentations() {
@@ -1345,21 +1142,8 @@ async function loadCloudPresentations() {
       data.length === 0
     ) {
 
-      savedPresentations.innerHTML = `
-
-        <div class="cloud-presentation">
-
-          <strong>
-            Tiada presentation
-          </strong>
-
-          <small>
-            Save presentation pertama anda.
-          </small>
-
-        </div>
-
-      `;
+      savedPresentations.innerHTML =
+        "Belum ada presentation disimpan.";
 
       return;
 
@@ -1383,155 +1167,90 @@ async function loadCloudPresentations() {
           "cloud-presentation";
 
 
-        const cardTop =
-          document.createElement(
-            "div"
+        card.innerHTML = `
+
+          <div>
+
+            <strong>
+              ${escapeHTML(
+                presentation.title ||
+                "Untitled"
+              )}
+            </strong>
+
+            <small>
+              ${formatDate(
+                presentation.created_at
+              )}
+            </small>
+
+          </div>
+
+          <div>
+
+            <button class="open-cloud-btn">
+              📂 Buka
+            </button>
+
+            <button class="edit-cloud-btn">
+              ✏️ Edit
+            </button>
+
+            <button class="delete-cloud-btn">
+              🗑️ Padam
+            </button>
+
+          </div>
+
+        `;
+
+
+        card
+          .querySelector(
+            ".open-cloud-btn"
+          )
+          .addEventListener(
+            "click",
+            () => {
+
+              openCloudPresentation(
+                presentation
+              );
+
+            }
           );
 
 
-        const title =
-          document.createElement(
-            "strong"
+        card
+          .querySelector(
+            ".edit-cloud-btn"
+          )
+          .addEventListener(
+            "click",
+            () => {
+
+              editCloudPresentation(
+                presentation
+              );
+
+            }
           );
 
 
-        title.textContent =
-          presentation.title ||
-          "Untitled";
+        card
+          .querySelector(
+            ".delete-cloud-btn"
+          )
+          .addEventListener(
+            "click",
+            () => {
 
+              deleteCloudPresentation(
+                presentation.id
+              );
 
-        const date =
-          document.createElement(
-            "small"
+            }
           );
-
-
-        date.textContent =
-          formatDate(
-            presentation.created_at
-          );
-
-
-        cardTop.appendChild(
-          title
-        );
-
-
-        cardTop.appendChild(
-          date
-        );
-
-
-        const actions =
-          document.createElement(
-            "div"
-          );
-
-
-        // OPEN
-
-        const openButton =
-          document.createElement(
-            "button"
-          );
-
-
-        openButton.className =
-          "open-cloud-btn";
-
-
-        openButton.textContent =
-          "📂 Buka";
-
-
-        openButton.addEventListener(
-          "click",
-          () => {
-
-            loadCloudPresentation(
-              presentation
-            );
-
-          }
-        );
-
-
-        // EDIT
-
-        const editCloudButton =
-          document.createElement(
-            "button"
-          );
-
-
-        editCloudButton.className =
-          "edit-cloud-btn";
-
-
-        editCloudButton.textContent =
-          "✏️ Edit";
-
-
-        editCloudButton.addEventListener(
-          "click",
-          () => {
-
-            editCloudPresentation(
-              presentation
-            );
-
-          }
-        );
-
-
-        // DELETE
-
-        const deleteButton =
-          document.createElement(
-            "button"
-          );
-
-
-        deleteButton.className =
-          "delete-cloud-btn";
-
-
-        deleteButton.textContent =
-          "🗑️ Padam";
-
-
-        deleteButton.addEventListener(
-          "click",
-          () => {
-
-            deleteCloudPresentation(
-              presentation.id
-            );
-
-          }
-        );
-
-
-        actions.appendChild(
-          openButton
-        );
-
-        actions.appendChild(
-          editCloudButton
-        );
-
-        actions.appendChild(
-          deleteButton
-        );
-
-
-        card.appendChild(
-          cardTop
-        );
-
-        card.appendChild(
-          actions
-        );
 
 
         savedPresentations.appendChild(
@@ -1544,29 +1263,13 @@ async function loadCloudPresentations() {
   } catch (error) {
 
     console.error(
-      "CLOUD LOAD ERROR:",
+      "CLOUD ERROR:",
       error
     );
 
 
     savedPresentations.innerHTML =
-      `
-
-        <div class="cloud-presentation">
-
-          <strong>
-            ❌ Cloud Error
-          </strong>
-
-          <small>
-            ${escapeHTML(
-              error.message
-            )}
-          </small>
-
-        </div>
-
-      `;
+      "❌ Gagal load Cloud";
 
   }
 
@@ -1574,64 +1277,10 @@ async function loadCloudPresentations() {
 
 
 // ==========================================
-// PARSE CLOUD PRESENTATION
+// OPEN CLOUD
 // ==========================================
 
-function parseCloudPresentation(
-  presentation
-) {
-
-  try {
-
-    const parsed =
-      JSON.parse(
-        presentation.content
-      );
-
-
-    if (
-      Array.isArray(parsed) &&
-      parsed.length > 0
-    ) {
-
-      return parsed;
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Content bukan JSON:",
-      error
-    );
-
-  }
-
-
-  return [
-
-    {
-
-      title:
-        presentation.title ||
-        "Untitled Presentation",
-
-      content:
-        presentation.content ||
-        ""
-
-    }
-
-  ];
-
-}
-
-
-// ==========================================
-// OPEN CLOUD PRESENTATION
-// ==========================================
-
-function loadCloudPresentation(
+function openCloudPresentation(
   presentation
 ) {
 
@@ -1642,9 +1291,20 @@ function loadCloudPresentation(
 
 
     slides =
-      parseCloudPresentation(
-        presentation
+      JSON.parse(
+        presentation.content
       );
+
+
+    if (
+      !Array.isArray(slides)
+    ) {
+
+      throw new Error(
+        "Invalid presentation"
+      );
+
+    }
 
 
     currentSlide =
@@ -1653,14 +1313,9 @@ function loadCloudPresentation(
 
     saveLocalSlides();
 
-
-    setEditMode(
-      false
-    );
-
+    setEditMode(false);
 
     renderSlides();
-
 
     setStatus(
       "📂 Presentation dibuka"
@@ -1668,11 +1323,7 @@ function loadCloudPresentation(
 
   } catch (error) {
 
-    console.error(
-      "OPEN ERROR:",
-      error
-    );
-
+    console.error(error);
 
     alert(
       "Gagal buka presentation."
@@ -1684,7 +1335,7 @@ function loadCloudPresentation(
 
 
 // ==========================================
-// EDIT CLOUD PRESENTATION
+// EDIT CLOUD
 // ==========================================
 
 function editCloudPresentation(
@@ -1698,9 +1349,20 @@ function editCloudPresentation(
 
 
     slides =
-      parseCloudPresentation(
-        presentation
+      JSON.parse(
+        presentation.content
       );
+
+
+    if (
+      !Array.isArray(slides)
+    ) {
+
+      throw new Error(
+        "Invalid presentation"
+      );
+
+    }
 
 
     currentSlide =
@@ -1709,39 +1371,17 @@ function editCloudPresentation(
 
     saveLocalSlides();
 
+    setEditMode(true);
 
     renderSlides();
-
-
-    setEditMode(
-      true
-    );
-
 
     setStatus(
       "✏️ Presentation sedang diedit"
     );
 
-
-    if (editor) {
-
-      editor.scrollIntoView({
-        behavior:
-          "smooth",
-
-        block:
-          "start"
-      });
-
-    }
-
   } catch (error) {
 
-    console.error(
-      "EDIT ERROR:",
-      error
-    );
-
+    console.error(error);
 
     alert(
       "Gagal edit presentation."
@@ -1753,29 +1393,25 @@ function editCloudPresentation(
 
 
 // ==========================================
-// DELETE CLOUD PRESENTATION
+// DELETE CLOUD
 // ==========================================
 
 async function deleteCloudPresentation(
   id
 ) {
 
-  const confirmed =
-    confirm(
+  if (
+    !confirm(
       "Padam presentation ini dari Cloud?"
-    );
+    )
+  ) {
 
-
-  if (!confirmed)
     return;
+
+  }
 
 
   try {
-
-    setStatus(
-      "☁️ Memadam..."
-    );
-
 
     const {
       error
@@ -1814,19 +1450,14 @@ async function deleteCloudPresentation(
     );
 
 
-    await loadCloudPresentations();
+    loadCloudPresentations();
 
   } catch (error) {
 
-    console.error(
-      "DELETE ERROR:",
-      error
-    );
-
+    console.error(error);
 
     alert(
-      "Gagal padam presentation:\n\n" +
-      error.message
+      "Gagal padam presentation."
     );
 
   }
@@ -1835,26 +1466,16 @@ async function deleteCloudPresentation(
 
 
 // ==========================================
-// REFRESH CLOUD
+// REFRESH
 // ==========================================
 
 if (refreshCloudBtn) {
 
   refreshCloudBtn.addEventListener(
     "click",
-    async () => {
+    () => {
 
-      setStatus(
-        "🔄 Refreshing Cloud..."
-      );
-
-
-      await loadCloudPresentations();
-
-
-      setStatus(
-        "☁️ Cloud refreshed"
-      );
+      loadCloudPresentations();
 
     }
   );
@@ -1863,7 +1484,7 @@ if (refreshCloudBtn) {
 
 
 // ==========================================
-// NORMAL NAVIGATION BUTTONS
+// NORMAL NAVIGATION
 // ==========================================
 
 if (previousBtn) {
@@ -1887,7 +1508,7 @@ if (nextBtn) {
 
 
 // ==========================================
-// PRESENTATION MODE
+// PRESENT
 // ==========================================
 
 function startPresentation() {
@@ -1897,7 +1518,19 @@ function startPresentation() {
   );
 
 
+  // Make sure arrows update immediately
+
   updateSlideUI();
+
+
+  // Force visibility in case another style hides it
+
+  if (presentationNavigation) {
+
+    presentationNavigation.style.display =
+      "flex";
+
+  }
 
 
   setStatus(
@@ -1907,11 +1540,23 @@ function startPresentation() {
 }
 
 
+// ==========================================
+// STOP PRESENT
+// ==========================================
+
 function stopPresentation() {
 
   document.body.classList.remove(
     "presentation-mode"
   );
+
+
+  if (presentationNavigation) {
+
+    presentationNavigation.style.display =
+      "none";
+
+  }
 
 
   setStatus(
@@ -1942,14 +1587,16 @@ if (stopBtn) {
 
 
 // ==========================================
-// PRESENTATION ← BUTTON
+// PRESENT LEFT ARROW
 // ==========================================
 
 if (presentationPrevBtn) {
 
   presentationPrevBtn.addEventListener(
     "click",
-    () => {
+    event => {
+
+      event.preventDefault();
 
       previousSlide();
 
@@ -1960,14 +1607,16 @@ if (presentationPrevBtn) {
 
 
 // ==========================================
-// PRESENTATION → BUTTON
+// PRESENT RIGHT ARROW
 // ==========================================
 
 if (presentationNextBtn) {
 
   presentationNextBtn.addEventListener(
     "click",
-    () => {
+    event => {
+
+      event.preventDefault();
 
       nextSlide();
 
@@ -1985,24 +1634,12 @@ document.addEventListener(
   "keydown",
   event => {
 
-    const editing =
-      event.target &&
-      (
-        event.target.isContentEditable ||
-        event.target.tagName === "INPUT" ||
-        event.target.tagName === "TEXTAREA"
-      );
-
-
-    // While editing text,
-    // don't change slides
-
     if (
-      editing &&
-      !document.body.classList.contains(
-        "presentation-mode"
-      )
+      event.key ===
+      "Escape"
     ) {
+
+      stopPresentation();
 
       return;
 
@@ -2025,16 +1662,6 @@ document.addEventListener(
     ) {
 
       previousSlide();
-
-    }
-
-
-    if (
-      event.key ===
-      "Escape"
-    ) {
-
-      stopPresentation();
 
     }
 
@@ -2074,20 +1701,15 @@ function formatDate(
   return date.toLocaleString(
     "ms-MY",
     {
-      day:
-        "2-digit",
+      day: "2-digit",
 
-      month:
-        "short",
+      month: "short",
 
-      year:
-        "numeric",
+      year: "numeric",
 
-      hour:
-        "2-digit",
+      hour: "2-digit",
 
-      minute:
-        "2-digit"
+      minute: "2-digit"
     }
   );
 
@@ -2095,40 +1717,27 @@ function formatDate(
 
 
 // ==========================================
-// START
+// INITIALIZE
 // ==========================================
 
 function initialize() {
 
   loadLocalSlides();
 
-
   currentSlide =
     0;
 
-
   renderSlides();
 
+  setEditMode(true);
 
-  setEditMode(
-    true
+  loadCloudPresentations();
+
+  setStatus(
+    "Ready ✓"
   );
-
-
-  if (supabaseClient) {
-
-    loadCloudPresentations();
-
-  } else {
-
-    setStatus(
-      "❌ Supabase tidak dimuat"
-    );
-
-  }
 
 }
 
 
 initialize();
-```
