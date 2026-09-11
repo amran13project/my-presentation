@@ -1,49 +1,68 @@
+```javascript
 // ==========================================
 // PRESENTATION CLOUD WORKSPACE
-// Full script.js
 // ==========================================
 
-// ===============================
-// SUPABASE
-// ===============================
 
-const SUPABASE_URL = "https://fmqhmubzqkyrtduzvkkf.supabase.co";
+// ==========================================
+// SUPABASE
+// ==========================================
+
+const SUPABASE_URL =
+  "https://fmqhmubzqkyrtduzvkkf.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_PgfVAhoqgdYJssbfspW7Ig_MlVYzUw2";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-// ===============================
-// DEFAULT PRESENTATION
-// ===============================
+// ==========================================
+// DEFAULT SLIDES
+// ==========================================
 
 const defaultSlides = [
+
   {
-    title: "My Presentation",
-    content: "Welcome to my presentation!"
+    title:
+      "My Presentation",
+
+    content:
+      "Welcome to my presentation!"
   },
+
   {
-    title: "Slide 2",
-    content: "Add your content here."
+    title:
+      "Slide 2",
+
+    content:
+      "Add your content here."
   },
+
   {
-    title: "Slide 3",
-    content: "You can edit this slide."
+    title:
+      "Slide 3",
+
+    content:
+      "You can edit this slide."
   }
+
 ];
 
 
-// ===============================
+// ==========================================
 // VARIABLES
-// ===============================
+// ==========================================
 
 let slides = [];
+
 let currentSlide = 0;
+
 let currentPresentationId = null;
 
 let autoSaveTimer = null;
@@ -51,440 +70,779 @@ let autoSaveTimer = null;
 let isEditMode = true;
 
 
-// ===============================
-// DOM ELEMENTS
-// ===============================
+// ==========================================
+// ELEMENTS
+// ==========================================
 
-const editor = document.getElementById("editor");
-const slideContainer = document.getElementById("slideContainer");
+const editor =
+  document.getElementById(
+    "editor"
+  );
+
+const slideContainer =
+  document.getElementById(
+    "slideContainer"
+  );
 
 const slideThumbnails =
-  document.getElementById("slideThumbnails");
+  document.getElementById(
+    "slideThumbnails"
+  );
 
 const slideNumber =
-  document.getElementById("slideNumber");
+  document.getElementById(
+    "slideNumber"
+  );
 
 const slideCounter =
-  document.getElementById("slideCounter");
+  document.getElementById(
+    "slideCounter"
+  );
 
 const saveStatus =
-  document.getElementById("saveStatus");
+  document.getElementById(
+    "saveStatus"
+  );
 
 const previousBtn =
-  document.getElementById("previousBtn");
+  document.getElementById(
+    "previousBtn"
+  );
 
 const nextBtn =
-  document.getElementById("nextBtn");
+  document.getElementById(
+    "nextBtn"
+  );
 
 const stopBtn =
-  document.getElementById("stopBtn");
+  document.getElementById(
+    "stopBtn"
+  );
 
 const saveBtn =
-  document.getElementById("saveBtn");
+  document.getElementById(
+    "saveBtn"
+  );
 
 const editBtn =
-  document.getElementById("editBtn");
+  document.getElementById(
+    "editBtn"
+  );
 
 const addImageBtn =
-  document.getElementById("addImageBtn");
+  document.getElementById(
+    "addImageBtn"
+  );
 
 const addSlideBtn =
-  document.getElementById("addSlideBtn");
+  document.getElementById(
+    "addSlideBtn"
+  );
 
 const newSlideSmallBtn =
-  document.getElementById("newSlideSmallBtn");
+  document.getElementById(
+    "newSlideSmallBtn"
+  );
 
 const deleteSlideBtn =
-  document.getElementById("deleteSlideBtn");
+  document.getElementById(
+    "deleteSlideBtn"
+  );
 
 const presentBtn =
-  document.getElementById("presentBtn");
+  document.getElementById(
+    "presentBtn"
+  );
 
 const imageInput =
-  document.getElementById("imageInput");
+  document.getElementById(
+    "imageInput"
+  );
 
 const savedPresentations =
-  document.getElementById("savedPresentations");
+  document.getElementById(
+    "savedPresentations"
+  );
 
 const refreshCloudBtn =
-  document.getElementById("refreshCloudBtn");
+  document.getElementById(
+    "refreshCloudBtn"
+  );
 
 
-// ===============================
+// PRESENTATION ARROWS
+
+const presentationPrevBtn =
+  document.getElementById(
+    "presentationPrevBtn"
+  );
+
+const presentationNextBtn =
+  document.getElementById(
+    "presentationNextBtn"
+  );
+
+
+// ==========================================
 // STATUS
-// ===============================
+// ==========================================
 
 function setStatus(message) {
+
   if (saveStatus) {
-    saveStatus.textContent = message;
+
+    saveStatus.textContent =
+      message;
+
   }
+
 }
 
 
-// ===============================
-// LOCAL STORAGE
-// ===============================
+// ==========================================
+// ESCAPE HTML
+// ==========================================
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    text || "";
+
+  return div.innerHTML;
+
+}
+
+
+// ==========================================
+// STRIP HTML
+// ==========================================
+
+function stripHTML(html) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.innerHTML =
+    html || "";
+
+  return (
+    div.textContent ||
+    div.innerText ||
+    ""
+  )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+
+}
+
+
+// ==========================================
+// LOCAL SAVE
+// ==========================================
 
 function saveLocalSlides() {
+
   localStorage.setItem(
     "myPresentationSlides",
     JSON.stringify(slides)
   );
+
 }
+
+
+// ==========================================
+// LOCAL LOAD
+// ==========================================
 
 function loadLocalSlides() {
-  const saved =
-    localStorage.getItem("myPresentationSlides");
 
-  if (saved) {
-    try {
-      slides = JSON.parse(saved);
+  try {
 
-      if (!Array.isArray(slides) || slides.length === 0) {
-        slides = structuredClone(defaultSlides);
+    const saved =
+      localStorage.getItem(
+        "myPresentationSlides"
+      );
+
+
+    if (saved) {
+
+      slides =
+        JSON.parse(
+          saved
+        );
+
+      if (
+        !Array.isArray(
+          slides
+        ) ||
+        slides.length === 0
+      ) {
+
+        slides =
+          JSON.parse(
+            JSON.stringify(
+              defaultSlides
+            )
+          );
+
       }
-    } catch (error) {
-      slides = structuredClone(defaultSlides);
+
+    } else {
+
+      slides =
+        JSON.parse(
+          JSON.stringify(
+            defaultSlides
+          )
+        );
+
     }
-  } else {
-    slides = structuredClone(defaultSlides);
+
+  } catch (error) {
+
+    console.error(
+      "Local load error:",
+      error
+    );
+
+    slides =
+      JSON.parse(
+        JSON.stringify(
+          defaultSlides
+        )
+      );
+
   }
+
 }
 
 
-// ===============================
-// HTML ESCAPE
-// ===============================
-
-function escapeHTML(text) {
-  const div = document.createElement("div");
-
-  div.textContent = text || "";
-
-  return div.innerHTML;
-}
-
-
-// ===============================
+// ==========================================
 // RENDER SLIDES
-// ===============================
+// ==========================================
 
 function renderSlides() {
-  if (!slideContainer) return;
 
-  slideContainer.innerHTML = "";
-
-  slides.forEach((slide, index) => {
-
-    const slideElement =
-      document.createElement("div");
-
-    slideElement.className =
-      "slide" +
-      (index === currentSlide ? " active" : "");
-
-    slideElement.dataset.index = index;
+  if (!slideContainer)
+    return;
 
 
-    // TITLE
-    const title =
-      document.createElement("div");
-
-    title.className = "slide-title";
-
-    title.contentEditable =
-      isEditMode ? "true" : "false";
-
-    title.spellcheck = true;
-
-    title.textContent =
-      slide.title || `Slide ${index + 1}`;
+  slideContainer.innerHTML =
+    "";
 
 
-    // CONTENT
-    const content =
-      document.createElement("div");
+  slides.forEach(
+    (slide, index) => {
 
-    content.className = "slide-text";
-
-    content.contentEditable =
-      isEditMode ? "true" : "false";
-
-    content.spellcheck = true;
-
-    content.innerHTML =
-      slide.content || "Add your content here.";
+      const slideElement =
+        document.createElement(
+          "div"
+        );
 
 
-    // TITLE CHANGE
-    title.addEventListener("input", () => {
-
-      slides[index].title =
-        title.textContent.trim();
-
-      saveLocalSlides();
-
-      renderThumbnails();
-
-      scheduleAutoSave();
-    });
+      slideElement.className =
+        "slide";
 
 
-    // CONTENT CHANGE
-    content.addEventListener("input", () => {
+      if (
+        index === currentSlide
+      ) {
 
-      slides[index].content =
-        content.innerHTML;
+        slideElement.classList.add(
+          "active"
+        );
 
-      saveLocalSlides();
-
-      scheduleAutoSave();
-    });
+      }
 
 
-    slideElement.appendChild(title);
-    slideElement.appendChild(content);
+      const content =
+        document.createElement(
+          "div"
+        );
 
-    slideContainer.appendChild(slideElement);
-  });
 
+      content.className =
+        "slide-content";
+
+
+      const title =
+        document.createElement(
+          "div"
+        );
+
+
+      title.className =
+        "slide-title";
+
+
+      title.contentEditable =
+        isEditMode
+          ? "true"
+          : "false";
+
+
+      title.spellcheck =
+        true;
+
+
+      title.textContent =
+        slide.title ||
+        `Slide ${index + 1}`;
+
+
+      const text =
+        document.createElement(
+          "div"
+        );
+
+
+      text.className =
+        "slide-text";
+
+
+      text.contentEditable =
+        isEditMode
+          ? "true"
+          : "false";
+
+
+      text.spellcheck =
+        true;
+
+
+      text.innerHTML =
+        slide.content ||
+        "Add your content here.";
+
+
+      // TITLE EDIT
+
+      title.addEventListener(
+        "input",
+        () => {
+
+          slides[index].title =
+            title.textContent;
+
+
+          saveLocalSlides();
+
+          renderThumbnails();
+
+          scheduleAutoSave();
+
+        }
+      );
+
+
+      // CONTENT EDIT
+
+      text.addEventListener(
+        "input",
+        () => {
+
+          slides[index].content =
+            text.innerHTML;
+
+
+          saveLocalSlides();
+
+          renderThumbnails();
+
+          scheduleAutoSave();
+
+        }
+      );
+
+
+      content.appendChild(
+        title
+      );
+
+
+      content.appendChild(
+        text
+      );
+
+
+      slideElement.appendChild(
+        content
+      );
+
+
+      slideContainer.appendChild(
+        slideElement
+      );
+
+    }
+  );
+
+
+  renderThumbnails();
 
   updateSlideUI();
+
 }
 
 
-// ===============================
-// THUMBNAILS
-// ===============================
+// ==========================================
+// RENDER THUMBNAILS
+// ==========================================
 
 function renderThumbnails() {
 
-  if (!slideThumbnails) return;
-
-  slideThumbnails.innerHTML = "";
-
-  slides.forEach((slide, index) => {
-
-    const thumbnail =
-      document.createElement("div");
-
-    thumbnail.className =
-      "slide-thumbnail" +
-      (index === currentSlide ? " active" : "");
+  if (!slideThumbnails)
+    return;
 
 
-    const number =
-      document.createElement("div");
-
-    number.className =
-      "thumbnail-number";
-
-    number.textContent =
-      index + 1;
+  slideThumbnails.innerHTML =
+    "";
 
 
-    const title =
-      document.createElement("div");
+  slides.forEach(
+    (slide, index) => {
 
-    title.className =
-      "thumbnail-title";
-
-    title.textContent =
-      slide.title || `Slide ${index + 1}`;
-
-
-    thumbnail.appendChild(number);
-    thumbnail.appendChild(title);
+      const thumbnail =
+        document.createElement(
+          "div"
+        );
 
 
-    thumbnail.addEventListener("click", () => {
-
-      showSlide(index);
-    });
+      thumbnail.className =
+        "slide-thumbnail";
 
 
-    slideThumbnails.appendChild(thumbnail);
-  });
+      if (
+        index === currentSlide
+      ) {
+
+        thumbnail.classList.add(
+          "active"
+        );
+
+      }
+
+
+      thumbnail.innerHTML = `
+
+        <div class="thumbnail-number">
+          ${index + 1}
+        </div>
+
+        <div class="thumbnail-content">
+
+          <div class="thumbnail-title">
+            ${escapeHTML(
+              slide.title ||
+              `Slide ${index + 1}`
+            )}
+          </div>
+
+          <div class="thumbnail-text">
+            ${escapeHTML(
+              stripHTML(
+                slide.content
+              ) ||
+              "Empty slide"
+            )}
+          </div>
+
+        </div>
+
+      `;
+
+
+      thumbnail.addEventListener(
+        "click",
+        () => {
+
+          showSlide(
+            index
+          );
+
+        }
+      );
+
+
+      slideThumbnails.appendChild(
+        thumbnail
+      );
+
+    }
+  );
+
 }
 
 
-// ===============================
-// UPDATE UI
-// ===============================
+// ==========================================
+// UPDATE SLIDE UI
+// ==========================================
 
 function updateSlideUI() {
 
+  const counter =
+    `${currentSlide + 1} / ${slides.length}`;
+
+
   if (slideNumber) {
+
     slideNumber.textContent =
-      `Slide ${currentSlide + 1}`;
+      counter;
+
   }
 
 
   if (slideCounter) {
+
     slideCounter.textContent =
-      `${currentSlide + 1} / ${slides.length}`;
+      counter;
+
   }
 
 
   if (previousBtn) {
+
     previousBtn.disabled =
       currentSlide <= 0;
+
   }
 
 
   if (nextBtn) {
+
     nextBtn.disabled =
-      currentSlide >= slides.length - 1;
+      currentSlide >=
+      slides.length - 1;
+
+  }
+
+
+  // PRESENT ARROWS
+
+  if (presentationPrevBtn) {
+
+    presentationPrevBtn.disabled =
+      currentSlide <= 0;
+
+  }
+
+
+  if (presentationNextBtn) {
+
+    presentationNextBtn.disabled =
+      currentSlide >=
+      slides.length - 1;
+
   }
 
 
   document
-    .querySelectorAll(".slide")
-    .forEach((slide, index) => {
+    .querySelectorAll(
+      ".slide"
+    )
+    .forEach(
+      (slide, index) => {
 
-      slide.classList.toggle(
-        "active",
-        index === currentSlide
-      );
-    });
+        slide.classList.toggle(
+          "active",
+          index === currentSlide
+        );
+
+      }
+    );
 
 
   document
-    .querySelectorAll(".slide-thumbnail")
-    .forEach((thumbnail, index) => {
+    .querySelectorAll(
+      ".slide-thumbnail"
+    )
+    .forEach(
+      (thumbnail, index) => {
 
-      thumbnail.classList.toggle(
-        "active",
-        index === currentSlide
-      );
-    });
+        thumbnail.classList.toggle(
+          "active",
+          index === currentSlide
+        );
+
+      }
+    );
+
 }
 
 
-// ===============================
+// ==========================================
 // SHOW SLIDE
-// ===============================
+// ==========================================
 
 function showSlide(index) {
 
+  if (
+    slides.length === 0
+  ) {
+
+    return;
+
+  }
+
+
   if (index < 0) {
+
     index = 0;
+
   }
 
-  if (index >= slides.length) {
-    index = slides.length - 1;
+
+  if (
+    index >= slides.length
+  ) {
+
+    index =
+      slides.length - 1;
+
   }
 
-  currentSlide = index;
+
+  currentSlide =
+    index;
+
 
   updateSlideUI();
+
 }
 
 
-// ===============================
+// ==========================================
 // NEXT
-// ===============================
+// ==========================================
 
 function nextSlide() {
 
-  if (currentSlide < slides.length - 1) {
+  if (
+    currentSlide <
+    slides.length - 1
+  ) {
 
     currentSlide++;
 
     updateSlideUI();
+
   }
+
 }
 
 
-// ===============================
+// ==========================================
 // PREVIOUS
-// ===============================
+// ==========================================
 
 function previousSlide() {
 
-  if (currentSlide > 0) {
+  if (
+    currentSlide > 0
+  ) {
 
     currentSlide--;
 
     updateSlideUI();
+
   }
+
 }
 
 
-// ===============================
+// ==========================================
 // EDIT MODE
-// ===============================
+// ==========================================
 
-function setEditMode(enabled) {
+function setEditMode(
+  enabled
+) {
 
-  isEditMode = enabled;
+  isEditMode =
+    enabled;
 
 
   document
-    .querySelectorAll(".slide-title, .slide-text")
-    .forEach(element => {
+    .querySelectorAll(
+      ".slide-title, .slide-text"
+    )
+    .forEach(
+      element => {
 
-      element.contentEditable =
-        enabled ? "true" : "false";
-    });
+        element.contentEditable =
+          enabled
+            ? "true"
+            : "false";
+
+      }
+    );
 
 
   if (editBtn) {
 
-    if (enabled) {
+    editBtn.textContent =
+      enabled
+        ? "🔒 Lock"
+        : "✏️ Edit";
 
-      editBtn.textContent =
-        "🔒 Lock";
-
-    } else {
-
-      editBtn.textContent =
-        "✏️ Edit";
-    }
   }
 
 
-  if (enabled) {
+  setStatus(
+    enabled
+      ? "✏️ Edit mode aktif"
+      : "🔒 Editing locked"
+  );
 
-    setStatus("✏️ Edit mode aktif");
-
-  } else {
-
-    setStatus("🔒 Editing dikunci");
-  }
 }
 
 
-// ===============================
+// ==========================================
 // EDIT BUTTON
-// ===============================
+// ==========================================
 
 if (editBtn) {
 
-  editBtn.addEventListener("click", () => {
+  editBtn.addEventListener(
+    "click",
+    () => {
 
-    setEditMode(!isEditMode);
-  });
+      setEditMode(
+        !isEditMode
+      );
+
+    }
+  );
+
 }
 
 
-// ===============================
+// ==========================================
 // ADD SLIDE
-// ===============================
+// ==========================================
 
-function addSlide() {
+function addNewSlide() {
 
-  const newSlide = {
+  slides.push({
 
     title:
-      `New Slide ${slides.length + 1}`,
+      `Slide ${slides.length + 1}`,
 
     content:
       "Add your content here."
-  };
 
+  });
 
-  slides.push(newSlide);
 
   currentSlide =
     slides.length - 1;
@@ -494,66 +852,81 @@ function addSlide() {
 
   renderSlides();
 
-  renderThumbnails();
 
-  setStatus("➕ Slide ditambah");
+  setStatus(
+    "➕ Slide ditambah"
+  );
+
 
   scheduleAutoSave();
+
 }
 
 
-// TOP ADD SLIDE
 if (addSlideBtn) {
 
   addSlideBtn.addEventListener(
     "click",
-    addSlide
+    addNewSlide
   );
+
 }
 
 
-// SIDEBAR ADD SLIDE
 if (newSlideSmallBtn) {
 
   newSlideSmallBtn.addEventListener(
     "click",
-    addSlide
+    addNewSlide
   );
+
 }
 
 
-// ===============================
+// ==========================================
 // DELETE SLIDE
-// ===============================
+// ==========================================
 
 function deleteCurrentSlide() {
 
-  if (slides.length <= 1) {
+  if (
+    slides.length <= 1
+  ) {
 
     alert(
-      "Presentation mesti mempunyai sekurang-kurangnya 1 slide."
+      "Mesti ada sekurang-kurangnya 1 slide."
     );
 
     return;
+
   }
 
 
-  const confirmDelete =
-    confirm(
-      `Delete Slide ${currentSlide + 1}?`
-    );
+  if (
+    !confirm(
+      `Padam Slide ${currentSlide + 1}?`
+    )
+  ) {
+
+    return;
+
+  }
 
 
-  if (!confirmDelete) return;
+  slides.splice(
+    currentSlide,
+    1
+  );
 
 
-  slides.splice(currentSlide, 1);
-
-
-  if (currentSlide >= slides.length) {
+  if (
+    currentSlide >=
+    slides.length
+  ) {
 
     currentSlide =
       slides.length - 1;
+
   }
 
 
@@ -561,11 +934,13 @@ function deleteCurrentSlide() {
 
   renderSlides();
 
-  renderThumbnails();
-
-  setStatus("🗑️ Slide deleted");
-
   scheduleAutoSave();
+
+
+  setStatus(
+    "🗑️ Slide dipadam"
+  );
+
 }
 
 
@@ -575,103 +950,213 @@ if (deleteSlideBtn) {
     "click",
     deleteCurrentSlide
   );
+
 }
 
 
-// ===============================
-// SAVE PRESENTATION
-// ===============================
+// ==========================================
+// IMAGE
+// ==========================================
+
+if (
+  addImageBtn &&
+  imageInput
+) {
+
+  addImageBtn.addEventListener(
+    "click",
+    () => {
+
+      imageInput.click();
+
+    }
+  );
+
+
+  imageInput.addEventListener(
+    "change",
+    event => {
+
+      const file =
+        event.target.files[0];
+
+
+      if (!file)
+        return;
+
+
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
+
+        alert(
+          "Sila pilih fail gambar."
+        );
+
+        imageInput.value =
+          "";
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () => {
+
+          const imageHTML = `
+
+            <br>
+
+            <img
+              src="${reader.result}"
+              alt="Presentation image"
+            >
+
+            <br>
+
+          `;
+
+
+          slides[currentSlide]
+            .content +=
+            imageHTML;
+
+
+          saveLocalSlides();
+
+          renderSlides();
+
+          setStatus(
+            "🖼️ Image ditambah"
+          );
+
+
+          scheduleAutoSave();
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+
+      imageInput.value =
+        "";
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// SAVE
+// ==========================================
 
 async function savePresentation() {
 
-  if (!supabaseClient) {
+  saveLocalSlides();
 
-    setStatus("❌ Supabase tidak tersedia");
 
-    return;
-  }
+  setStatus(
+    "☁️ Saving..."
+  );
+
+
+  const title =
+    slides[0]?.title?.trim() ||
+    "Untitled Presentation";
+
+
+  const content =
+    JSON.stringify(
+      slides
+    );
 
 
   try {
 
-    setStatus("💾 Saving...");
+    let result;
 
 
-    const title =
-      slides[0]?.title?.trim() ||
-      "Untitled Presentation";
+    // UPDATE
 
+    if (
+      currentPresentationId
+    ) {
 
-    const content =
-      JSON.stringify(slides);
-
-
-    // UPDATE EXISTING
-    if (currentPresentationId) {
-
-      const { error } =
+      result =
         await supabaseClient
           .from("works")
           .update({
 
-            title: title,
+            title:
+              title,
 
-            content: content
+            content:
+              content
 
           })
           .eq(
             "id",
             currentPresentationId
-          );
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      setStatus(
-        "☁️ Saved to Cloud ✓"
-      );
-
-    }
-
-    // INSERT NEW
-    else {
-
-      const { data, error } =
-        await supabaseClient
-          .from("works")
-          .insert([{
-
-            title: title,
-
-            content: content
-
-          }])
+          )
           .select()
           .single();
 
-
-      if (error) {
-        throw error;
-      }
-
-
-      if (data) {
-
-        currentPresentationId =
-          data.id;
-      }
-
-
-      setStatus(
-        "☁️ New presentation saved ✓"
-      );
     }
 
 
+    // INSERT
+
+    else {
+
+      result =
+        await supabaseClient
+          .from("works")
+          .insert({
+
+            title:
+              title,
+
+            content:
+              content
+
+          })
+          .select()
+          .single();
+
+    }
+
+
+    if (
+      result.error
+    ) {
+
+      throw result.error;
+
+    }
+
+
+    currentPresentationId =
+      result.data.id;
+
+
+    setStatus(
+      "☁️✅ Saved to Cloud"
+    );
+
+
     loadCloudPresentations();
+
 
   } catch (error) {
 
@@ -685,269 +1170,65 @@ async function savePresentation() {
       "❌ Save gagal"
     );
 
-
-    alert(
-      "Gagal save ke Cloud:\n\n" +
-      error.message
-    );
   }
+
 }
 
 
-// SAVE BUTTON
 if (saveBtn) {
 
   saveBtn.addEventListener(
     "click",
     savePresentation
   );
+
 }
 
 
-// ===============================
-// IMAGE UPLOAD
-// ===============================
-
-if (addImageBtn) {
-
-  addImageBtn.addEventListener(
-    "click",
-    () => {
-
-      if (imageInput) {
-
-        imageInput.click();
-      }
-    }
-  );
-}
-
-
-if (imageInput) {
-
-  imageInput.addEventListener(
-    "change",
-    event => {
-
-      const file =
-        event.target.files[0];
-
-
-      if (!file) return;
-
-
-      if (!file.type.startsWith("image/")) {
-
-        alert(
-          "Sila pilih fail gambar."
-        );
-
-        return;
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload = function () {
-
-        const imageHTML = `
-          <br>
-          <img
-            src="${reader.result}"
-            style="
-              max-width:100%;
-              max-height:320px;
-              border-radius:12px;
-              display:block;
-              margin:15px auto;
-            "
-          >
-          <br>
-        `;
-
-
-        slides[currentSlide].content =
-          (slides[currentSlide].content || "") +
-          imageHTML;
-
-
-        saveLocalSlides();
-
-        renderSlides();
-
-        renderThumbnails();
-
-        setStatus(
-          "🖼️ Image ditambah"
-        );
-
-        scheduleAutoSave();
-      };
-
-
-      reader.readAsDataURL(file);
-
-
-      imageInput.value = "";
-    }
-  );
-}
-
-
-// ===============================
+// ==========================================
 // AUTO SAVE
-// ===============================
+// ==========================================
 
 function scheduleAutoSave() {
 
-  clearTimeout(autoSaveTimer);
+  clearTimeout(
+    autoSaveTimer
+  );
 
 
   autoSaveTimer =
-    setTimeout(async () => {
+    setTimeout(
+      () => {
 
-      if (currentPresentationId) {
+        if (
+          currentPresentationId
+        ) {
 
-        await savePresentation();
-      }
+          savePresentation();
 
-    }, 2000);
+        }
+
+      },
+      2000
+    );
+
 }
 
 
-// ===============================
-// PRESENTATION MODE
-// ===============================
-
-function startPresentation() {
-
-  document.body.classList.add(
-    "presentation-mode"
-  );
-
-
-  showSlide(currentSlide);
-
-
-  setStatus(
-    "▶ Presentation mode"
-  );
-}
-
-
-function stopPresentation() {
-
-  document.body.classList.remove(
-    "presentation-mode"
-  );
-
-
-  setStatus(
-    "✕ Presentation stopped"
-  );
-}
-
-
-// PRESENT BUTTON
-if (presentBtn) {
-
-  presentBtn.addEventListener(
-    "click",
-    startPresentation
-  );
-}
-
-
-// STOP BUTTON
-if (stopBtn) {
-
-  stopBtn.addEventListener(
-    "click",
-    stopPresentation
-  );
-}
-
-
-// ===============================
-// NAVIGATION BUTTONS
-// ===============================
-
-if (previousBtn) {
-
-  previousBtn.addEventListener(
-    "click",
-    previousSlide
-  );
-}
-
-
-if (nextBtn) {
-
-  nextBtn.addEventListener(
-    "click",
-    nextSlide
-  );
-}
-
-
-// ===============================
-// KEYBOARD
-// ===============================
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.target &&
-      (
-        event.target.isContentEditable ||
-        event.target.tagName === "INPUT" ||
-        event.target.tagName === "TEXTAREA"
-      )
-    ) {
-
-      return;
-    }
-
-
-    if (event.key === "ArrowRight") {
-
-      nextSlide();
-    }
-
-
-    if (event.key === "ArrowLeft") {
-
-      previousSlide();
-    }
-
-
-    if (event.key === "Escape") {
-
-      stopPresentation();
-    }
-  }
-);
-
-
-// ===============================
-// CLOUD LOAD
-// ===============================
+// ==========================================
+// CLOUD LIST
+// ==========================================
 
 async function loadCloudPresentations() {
 
-  if (!savedPresentations) return;
+  if (
+    !savedPresentations
+  )
+    return;
 
 
   savedPresentations.innerHTML =
-    `
-      <div class="cloud-loading">
-        ☁️ Loading presentations...
-      </div>
-    `;
+    "☁️ Loading...";
 
 
   try {
@@ -962,183 +1243,199 @@ async function loadCloudPresentations() {
         .order(
           "created_at",
           {
-            ascending: false
+            ascending:
+              false
           }
         );
 
 
     if (error) {
+
       throw error;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
-      savedPresentations.innerHTML =
-        `
-          <div class="empty-cloud">
-            <div style="font-size:40px;">☁️</div>
-            <h3>No presentations</h3>
-            <p>Save your first presentation to Cloud.</p>
+      savedPresentations.innerHTML = `
+
+        <div class="empty-cloud">
+
+          <div style="font-size:40px;">
+            ☁️
           </div>
-        `;
+
+          <h3>
+            No presentations
+          </h3>
+
+          <p>
+            Save your first presentation.
+          </p>
+
+        </div>
+
+      `;
 
       return;
+
     }
 
 
-    savedPresentations.innerHTML = "";
+    savedPresentations.innerHTML =
+      "";
 
 
     data.forEach(
       presentation => {
 
         const card =
-          document.createElement("div");
-
-        card.className =
-          "cloud-card";
-
-
-        const title =
-          document.createElement("h3");
-
-        title.textContent =
-          presentation.title ||
-          "Untitled Presentation";
-
-
-        const date =
-          document.createElement("small");
-
-        date.textContent =
-          formatDate(
-            presentation.created_at
+          document.createElement(
+            "div"
           );
 
 
-        const buttons =
-          document.createElement("div");
-
-        buttons.className =
-          "cloud-card-buttons";
+        card.className =
+          "cloud-presentation";
 
 
-        // OPEN
-        const openButton =
-          document.createElement("button");
+        card.innerHTML = `
 
-        openButton.className =
-          "open-cloud-btn";
+          <div>
 
-        openButton.textContent =
-          "📂 Open";
+            <strong>
+              ${escapeHTML(
+                presentation.title ||
+                "Untitled"
+              )}
+            </strong>
+
+            <small>
+              ${formatDate(
+                presentation.created_at
+              )}
+            </small>
+
+          </div>
 
 
-        openButton.addEventListener(
+          <div>
+
+            <button
+              class="open-cloud-btn">
+
+              📂 Buka
+
+            </button>
+
+
+            <button
+              class="edit-cloud-btn">
+
+              ✏️ Edit
+
+            </button>
+
+
+            <button
+              class="delete-cloud-btn">
+
+              🗑️ Padam
+
+            </button>
+
+          </div>
+
+        `;
+
+
+        const openBtn =
+          card.querySelector(
+            ".open-cloud-btn"
+          );
+
+
+        const editCloudBtn =
+          card.querySelector(
+            ".edit-cloud-btn"
+          );
+
+
+        const deleteBtn =
+          card.querySelector(
+            ".delete-cloud-btn"
+          );
+
+
+        openBtn.addEventListener(
           "click",
           () => {
 
             loadCloudPresentation(
               presentation
             );
+
           }
         );
 
 
-        // EDIT
-        const editCloudButton =
-          document.createElement("button");
-
-        editCloudButton.className =
-          "edit-cloud-btn";
-
-        editCloudButton.textContent =
-          "✏️ Edit";
-
-
-        editCloudButton.addEventListener(
+        editCloudBtn.addEventListener(
           "click",
           () => {
 
             editCloudPresentation(
               presentation
             );
+
           }
         );
 
 
-        // DELETE
-        const deleteButton =
-          document.createElement("button");
-
-        deleteButton.className =
-          "delete-cloud-btn";
-
-        deleteButton.textContent =
-          "🗑️ Delete";
-
-
-        deleteButton.addEventListener(
+        deleteBtn.addEventListener(
           "click",
           () => {
 
             deleteCloudPresentation(
               presentation.id
             );
+
           }
         );
-
-
-        buttons.appendChild(
-          openButton
-        );
-
-        buttons.appendChild(
-          editCloudButton
-        );
-
-        buttons.appendChild(
-          deleteButton
-        );
-
-
-        card.appendChild(title);
-
-        card.appendChild(date);
-
-        card.appendChild(buttons);
 
 
         savedPresentations.appendChild(
           card
         );
+
       }
     );
+
 
   } catch (error) {
 
     console.error(
-      "CLOUD LOAD ERROR:",
+      "CLOUD ERROR:",
       error
     );
 
 
     savedPresentations.innerHTML =
-      `
-        <div class="cloud-error">
-          ❌ Gagal load Cloud
-          <br>
-          <small>${escapeHTML(error.message)}</small>
-        </div>
-      `;
+      `❌ ${escapeHTML(
+        error.message
+      )}`;
+
   }
+
 }
 
 
-// ===============================
-// OPEN CLOUD PRESENTATION
-// ===============================
+// ==========================================
+// OPEN CLOUD
+// ==========================================
 
 function loadCloudPresentation(
   presentation
@@ -1150,73 +1447,61 @@ function loadCloudPresentation(
       presentation.id;
 
 
-    const parsed =
+    slides =
       JSON.parse(
         presentation.content
       );
 
 
     if (
-      Array.isArray(parsed) &&
-      parsed.length > 0
+      !Array.isArray(slides) ||
+      slides.length === 0
     ) {
 
-      slides = parsed;
+      throw new Error(
+        "Invalid presentation"
+      );
 
-    } else {
-
-      slides = [{
-        title:
-          presentation.title ||
-          "Untitled Presentation",
-
-        content:
-          "No content"
-      }];
     }
 
 
-    currentSlide = 0;
+    currentSlide =
+      0;
 
 
     saveLocalSlides();
 
+    setEditMode(
+      false
+    );
+
     renderSlides();
-
-    renderThumbnails();
-
-    setEditMode(false);
 
 
     setStatus(
-      "📂 Presentation opened"
+      "📂 Presentation dibuka"
     );
 
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
 
   } catch (error) {
 
     console.error(
-      "OPEN ERROR:",
       error
     );
 
 
     alert(
-      "Gagal buka presentation:\n\n" +
-      error.message
+      "Gagal buka presentation."
     );
+
   }
+
 }
 
 
-// ===============================
-// EDIT CLOUD PRESENTATION
-// ===============================
+// ==========================================
+// EDIT CLOUD
+// ==========================================
 
 function editCloudPresentation(
   presentation
@@ -1228,222 +1513,382 @@ function editCloudPresentation(
       presentation.id;
 
 
-    const parsed =
+    slides =
       JSON.parse(
         presentation.content
       );
 
 
     if (
-      Array.isArray(parsed) &&
-      parsed.length > 0
+      !Array.isArray(slides) ||
+      slides.length === 0
     ) {
 
-      slides = parsed;
+      throw new Error(
+        "Invalid presentation"
+      );
 
-    } else {
-
-      slides = [{
-        title:
-          presentation.title ||
-          "Untitled Presentation",
-
-        content:
-          "Start editing..."
-      }];
     }
 
 
-    currentSlide = 0;
+    currentSlide =
+      0;
 
 
     saveLocalSlides();
 
-    renderSlides();
 
-    renderThumbnails();
+    // IMPORTANT
+    // Turn editing ON
 
-
-    // IMPORTANT:
-    // EDIT MODE ON
-    setEditMode(true);
-
-
-    setStatus(
-      "✏️ Edit mode aktif"
+    setEditMode(
+      true
     );
 
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    renderSlides();
+
+
+    setStatus(
+      "✏️ Presentation sedang diedit"
+    );
+
+
+    if (editor) {
+
+      editor.scrollIntoView({
+        behavior:
+          "smooth",
+
+        block:
+          "start"
+      });
+
+    }
+
 
   } catch (error) {
 
     console.error(
-      "EDIT ERROR:",
       error
     );
 
 
     alert(
-      "Gagal edit presentation:\n\n" +
-      error.message
+      "Gagal edit presentation."
     );
+
   }
+
 }
 
 
-// ===============================
-// DELETE CLOUD PRESENTATION
-// ===============================
+// ==========================================
+// DELETE CLOUD
+// ==========================================
 
 async function deleteCloudPresentation(
   id
 ) {
 
-  const confirmed =
-    confirm(
-      "Delete this presentation from Cloud?"
-    );
+  if (
+    !confirm(
+      "Padam presentation ini dari Cloud?"
+    )
+  ) {
 
+    return;
 
-  if (!confirmed) return;
+  }
 
 
   try {
 
-    setStatus(
-      "🗑️ Deleting..."
-    );
-
-
-    const { error } =
+    const {
+      error
+    } =
       await supabaseClient
         .from("works")
         .delete()
-        .eq("id", id);
+        .eq(
+          "id",
+          id
+        );
 
 
     if (error) {
+
       throw error;
+
     }
 
 
     if (
-      currentPresentationId === id
+      currentPresentationId ===
+      id
     ) {
 
       currentPresentationId =
         null;
+
     }
 
 
     setStatus(
-      "🗑️ Presentation deleted"
+      "🗑️ Presentation dipadam"
     );
 
 
-    await loadCloudPresentations();
+    loadCloudPresentations();
+
 
   } catch (error) {
 
     console.error(
-      "DELETE ERROR:",
       error
     );
 
 
     alert(
-      "Delete gagal:\n\n" +
-      error.message
+      "Gagal padam presentation."
     );
+
   }
+
 }
 
 
-// ===============================
+// ==========================================
 // REFRESH CLOUD
-// ===============================
+// ==========================================
 
 if (refreshCloudBtn) {
 
   refreshCloudBtn.addEventListener(
     "click",
-    async () => {
+    () => {
 
-      setStatus(
-        "🔄 Refreshing Cloud..."
-      );
+      loadCloudPresentations();
 
-
-      await loadCloudPresentations();
-
-
-      setStatus(
-        "☁️ Cloud refreshed"
-      );
     }
   );
+
 }
 
 
-// ===============================
-// DATE FORMAT
-// ===============================
+// ==========================================
+// PRESENT
+// ==========================================
 
-function formatDate(dateString) {
+if (presentBtn) {
 
-  if (!dateString) {
-    return "";
+  presentBtn.addEventListener(
+    "click",
+    () => {
+
+      document.body.classList.add(
+        "presentation-mode"
+      );
+
+
+      updateSlideUI();
+
+
+      setStatus(
+        "▶ Presentation mode"
+      );
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// STOP
+// ==========================================
+
+if (stopBtn) {
+
+  stopBtn.addEventListener(
+    "click",
+    () => {
+
+      document.body.classList.remove(
+        "presentation-mode"
+      );
+
+
+      setStatus(
+        "✕ Presentation stopped"
+      );
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// PRESENTATION CENTER ARROWS
+// ==========================================
+
+if (presentationPrevBtn) {
+
+  presentationPrevBtn.addEventListener(
+    "click",
+    () => {
+
+      previousSlide();
+
+    }
+  );
+
+}
+
+
+if (presentationNextBtn) {
+
+  presentationNextBtn.addEventListener(
+    "click",
+    () => {
+
+      nextSlide();
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// KEYBOARD
+// ==========================================
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    const editing =
+      event.target &&
+      (
+        event.target.isContentEditable ||
+        event.target.tagName === "INPUT" ||
+        event.target.tagName === "TEXTAREA"
+      );
+
+
+    if (
+      editing &&
+      !document.body.classList.contains(
+        "presentation-mode"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      event.key ===
+      "ArrowRight"
+    ) {
+
+      nextSlide();
+
+    }
+
+
+    if (
+      event.key ===
+      "ArrowLeft"
+    ) {
+
+      previousSlide();
+
+    }
+
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      stopPresentation();
+
+    }
+
   }
+);
+
+
+// ==========================================
+// DATE
+// ==========================================
+
+function formatDate(
+  dateString
+) {
+
+  if (!dateString)
+    return "";
 
 
   const date =
-    new Date(dateString);
+    new Date(
+      dateString
+    );
 
 
   return date.toLocaleString(
     "ms-MY",
     {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+      day:
+        "2-digit",
 
-      hour: "2-digit",
-      minute: "2-digit"
+      month:
+        "short",
+
+      year:
+        "numeric",
+
+      hour:
+        "2-digit",
+
+      minute:
+        "2-digit"
     }
   );
+
 }
 
 
-// ===============================
+// ==========================================
 // INITIALIZE
-// ===============================
+// ==========================================
 
 function initialize() {
 
   loadLocalSlides();
 
-  currentSlide = 0;
+  currentSlide =
+    0;
+
+  setEditMode(
+    true
+  );
 
   renderSlides();
-
-  renderThumbnails();
-
-  setEditMode(true);
 
   loadCloudPresentations();
 
   setStatus(
     "Ready ✓"
   );
+
 }
 
 
-// ===============================
-// START APP
-// ===============================
-
 initialize();
+```

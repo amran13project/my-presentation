@@ -1,20 +1,28 @@
+```html
 <!DOCTYPE html>
 <html lang="ms">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Presentation Cloud</title>
 
-  <link rel="stylesheet" href="style.css?v=2">
+  <link
+    rel="stylesheet"
+    href="style.css?v=3"
+  >
 </head>
 
 <body>
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- TOP BAR -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <header class="topbar">
 
@@ -25,8 +33,15 @@
       </div>
 
       <div class="brand-text">
-        <strong>Presentation</strong>
-        <span>Cloud Workspace</span>
+
+        <strong>
+          Presentation
+        </strong>
+
+        <span>
+          Cloud Workspace
+        </span>
+
       </div>
 
     </div>
@@ -37,33 +52,50 @@
       <button
         id="editBtn"
         class="edit-btn">
+
         ✏️ Edit
+
       </button>
+
 
       <button
         id="saveBtn"
         class="primary-btn">
+
         💾 Save
+
       </button>
+
 
       <button id="addImageBtn">
+
         🖼️ Image
+
       </button>
 
+
       <button id="addSlideBtn">
+
         ＋ Slide
+
       </button>
+
 
       <button
         id="deleteSlideBtn"
         class="danger-btn">
+
         🗑️ Delete
+
       </button>
+
 
       <button
         id="presentBtn"
         class="present-btn">
+
         ▶ Present
+
       </button>
 
     </div>
@@ -71,16 +103,16 @@
   </header>
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- WORKSPACE -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <main class="workspace">
 
 
-    <!-- ============================= -->
-    <!-- LEFT SIDEBAR -->
-    <!-- ============================= -->
+    <!-- ================================= -->
+    <!-- LEFT SLIDE SIDEBAR -->
+    <!-- ================================= -->
 
     <aside class="slide-sidebar">
 
@@ -88,7 +120,9 @@
 
         <div>
 
-          <strong>Slides</strong>
+          <strong>
+            Slides
+          </strong>
 
           <small id="slideNumber">
             1 / 1
@@ -96,10 +130,13 @@
 
         </div>
 
+
         <button
           id="newSlideSmallBtn"
           class="small-add-btn">
+
           ＋
+
         </button>
 
       </div>
@@ -111,9 +148,9 @@
     </aside>
 
 
-    <!-- ============================= -->
+    <!-- ================================= -->
     <!-- EDITOR -->
-    <!-- ============================= -->
+    <!-- ================================= -->
 
     <section class="editor-area">
 
@@ -140,8 +177,6 @@
       </div>
 
 
-      <!-- CANVAS -->
-
       <div id="editor">
 
         <div id="slideContainer">
@@ -150,16 +185,18 @@
       </div>
 
 
-      <!-- ============================= -->
-      <!-- SLIDE CONTROLS -->
-      <!-- ============================= -->
+      <!-- ================================= -->
+      <!-- NORMAL NAVIGATION -->
+      <!-- ================================= -->
 
       <div class="slide-controls">
 
         <button
           id="previousBtn"
           class="navigation-btn">
+
           ←
+
         </button>
 
 
@@ -171,25 +208,28 @@
         <button
           id="nextBtn"
           class="navigation-btn">
+
           →
+
         </button>
 
 
         <button
           id="stopBtn"
           class="stop-btn">
+
           ✕ Stop
+
         </button>
 
       </div>
 
-
     </section>
 
 
-    <!-- ============================= -->
+    <!-- ================================= -->
     <!-- CLOUD -->
-    <!-- ============================= -->
+    <!-- ================================= -->
 
     <aside id="cloudSection">
 
@@ -212,7 +252,9 @@
         <button
           id="refreshCloudBtn"
           class="refresh-btn">
+
           ↻
+
         </button>
 
       </div>
@@ -229,7 +271,8 @@
 
       <div class="cloud-status">
 
-        <span class="status-dot"></span>
+        <span class="status-dot">
+        </span>
 
         Cloud connected
 
@@ -246,32 +289,60 @@
   </main>
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- IMAGE INPUT -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <input
     type="file"
     id="imageInput"
     accept="image/*"
-    hidden>
+    hidden
+  >
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
+  <!-- PRESENTATION CENTER NAVIGATION -->
+  <!-- ================================= -->
+
+  <div id="presentationNavigation">
+
+    <button
+      id="presentationPrevBtn"
+      aria-label="Previous slide">
+
+      ←
+
+    </button>
+
+
+    <button
+      id="presentationNextBtn"
+      aria-label="Next slide">
+
+      →
+
+    </button>
+
+  </div>
+
+
+  <!-- ================================= -->
   <!-- SUPABASE -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
   </script>
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- APP -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <script src="script.js"></script>
 
 </body>
 
 </html>
+```
