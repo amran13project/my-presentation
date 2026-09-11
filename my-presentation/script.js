@@ -1,4 +1,3 @@
-```javascript
 // ==========================================
 // PRESENTATION CLOUD WORKSPACE
 // STABLE FULL SCRIPT
