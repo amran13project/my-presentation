@@ -852,3 +852,192 @@ body.presentation-mode .removeImageBtn {
     }
 
 }
+/* =================================
+   CLOUD PRESENTATIONS
+================================= */
+
+#cloudSection {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: 20px auto 0;
+
+    padding: 0 25px;
+
+}
+
+
+.cloudHeader {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+
+}
+
+
+.cloudHeader h2 {
+
+    font-size: 18px;
+
+}
+
+
+#refreshCloudBtn {
+
+    border: none;
+
+    background: #292929;
+
+    color: white;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+
+#refreshCloudBtn:hover {
+
+    background: #3c3c3c;
+
+}
+
+
+#savedPresentations {
+
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.cloudCard {
+
+    background: #151515;
+
+    border: 1px solid #292929;
+
+    border-radius: 12px;
+
+    padding: 14px;
+
+    min-width: 220px;
+
+    max-width: 300px;
+
+}
+
+
+.cloudCard h3 {
+
+    font-size: 16px;
+
+    margin-bottom: 7px;
+
+    word-break: break-word;
+
+}
+
+
+.cloudCard small {
+
+    display: block;
+
+    color: #888;
+
+    margin-bottom: 12px;
+
+}
+
+
+.cloudButtons {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+
+.cloudButtons button {
+
+    border: none;
+
+    background: #292929;
+
+    color: white;
+
+    padding: 8px 10px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+}
+
+
+.cloudButtons button:hover {
+
+    background: #3d3d3d;
+
+}
+
+
+.cloudButtons .cloudDelete {
+
+    background: #442222;
+
+}
+
+
+.cloudButtons .cloudDelete:hover {
+
+    background: #662b2b;
+
+}
+
+
+.emptyCloud {
+
+    color: #888;
+
+    font-size: 14px;
+
+}
+
+
+/* =================================
+   MOBILE CLOUD
+================================= */
+
+@media (max-width: 700px) {
+
+    #cloudSection {
+
+        padding: 0 10px;
+
+    }
+
+
+    .cloudCard {
+
+        width: 100%;
+
+        max-width: none;
+
+    }
+
+}
