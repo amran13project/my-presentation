@@ -1,767 +1,731 @@
-// =====================================
-// PRESENTATION WEBSITE
-// =====================================
+// ==========================================
+// MY PRESENTATION - CLOUD SAVE
+// ==========================================
 
+// ---------- SUPABASE ----------
+const SUPABASE_URL =
+  "https://fmqhmubzqkyrtduzvkkf.supabase.co";
 
-// =====================================
-// VARIABLES
-// =====================================
+const SUPABASE_KEY =
+  "sb_publishable_PgfVAhoqgdYJssbfspW7Ig_MlVYzUw2";
 
+let supabaseClient = null;
+
+if (window.supabase) {
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+}
+
+// ---------- VARIABLES ----------
 let currentSlide = 0;
+let currentPresentationId = null;
+let slides = [];
 
+const STORAGE_KEY = "myPresentationSlides";
+const TITLE_KEY = "myPresentationTitle";
 
-// =====================================
-// ELEMENTS
-// =====================================
+// ---------- ELEMENTS ----------
+const editor = document.getElementById("editor");
+const slideContainer = document.getElementById("slideContainer");
+const slideNumber = document.getElementById("slideNumber");
+const saveStatus = document.getElementById("saveStatus");
 
-const slides =
-    document.querySelectorAll(".slide");
+const previousBtn = document.getElementById("previousBtn");
+const nextBtn = document.getElementById("nextBtn");
+const stopBtn = document.getElementById("stopBtn");
 
-const slideNumber =
-    document.getElementById("slideNumber");
+const saveBtn = document.getElementById("saveBtn");
+const addImageBtn = document.getElementById("addImageBtn");
+const addSlideBtn = document.getElementById("addSlideBtn");
+const deleteSlideBtn = document.getElementById("deleteSlideBtn");
+const presentBtn = document.getElementById("presentBtn");
 
-const presentBtn =
-    document.getElementById("presentBtn");
+const imageInput = document.getElementById("imageInput");
 
-const previousBtn =
-    document.getElementById("previousBtn");
+// ---------- CLOUD ELEMENTS ----------
+const savedPresentations =
+  document.getElementById("savedPresentations");
 
-const nextBtn =
-    document.getElementById("nextBtn");
+const refreshCloudBtn =
+  document.getElementById("refreshCloudBtn");
 
-const stopBtn =
-    document.getElementById("stopBtn");
+// ---------- DEFAULT SLIDES ----------
+const defaultSlides = [
+  {
+    title: "My Presentation",
+    content: "Welcome to my presentation!"
+  },
+  {
+    title: "Slide 2",
+    content: "Add your content here."
+  },
+  {
+    title: "Slide 3",
+    content: "You can edit this slide."
+  }
+];
 
-const saveBtn =
-    document.getElementById("saveBtn");
+// ---------- INITIALIZE ----------
+function initialize() {
+  loadLocalPresentation();
+  renderSlides();
+  updateSlideNumber();
 
-const addImageBtn =
-    document.getElementById("addImageBtn");
+  if (supabaseClient) {
+    loadCloudPresentations();
+  } else {
+    setStatus("❌ Supabase tidak dimuat");
+  }
+}
 
-const addSlideBtn =
-    document.getElementById("addSlideBtn");
+// ---------- LOAD LOCAL ----------
+function loadLocalPresentation() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
 
-const deleteSlideBtn =
-    document.getElementById("deleteSlideBtn");
+    if (saved) {
+      slides = JSON.parse(saved);
+    } else {
+      slides = JSON.parse(JSON.stringify(defaultSlides));
+    }
+  } catch (error) {
+    console.error(error);
+    slides = JSON.parse(JSON.stringify(defaultSlides));
+  }
+}
 
-const imageInput =
-    document.getElementById("imageInput");
+// ---------- SAVE LOCAL ----------
+function saveLocalPresentation() {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(slides)
+  );
+}
 
-const saveStatus =
-    document.getElementById("saveStatus");
+// ---------- STATUS ----------
+function setStatus(message) {
+  if (saveStatus) {
+    saveStatus.textContent = message;
+  }
+}
 
+// ---------- RENDER SLIDES ----------
+function renderSlides() {
+  if (!slideContainer) return;
 
-// =====================================
-// SHOW SLIDE
-// =====================================
+  slideContainer.innerHTML = "";
 
+  slides.forEach((slide, index) => {
+    const slideElement = document.createElement("div");
+
+    slideElement.className = "slide";
+
+    if (index === currentSlide) {
+      slideElement.classList.add("active");
+    }
+
+    slideElement.innerHTML = `
+      <div class="slide-content">
+        <h1 contenteditable="true"
+            class="slide-title"
+            data-index="${index}">
+          ${escapeHTML(slide.title || "")}
+        </h1>
+
+        <div contenteditable="true"
+             class="slide-text"
+             data-index="${index}">
+          ${slide.content || ""}
+        </div>
+      </div>
+    `;
+
+    slideContainer.appendChild(slideElement);
+  });
+
+  attachEditingEvents();
+}
+
+// ---------- EDIT EVENTS ----------
+function attachEditingEvents() {
+  document.querySelectorAll(".slide-title").forEach((element) => {
+    element.addEventListener("input", function () {
+      const index = Number(this.dataset.index);
+
+      if (slides[index]) {
+        slides[index].title = this.innerText;
+        autoSave();
+      }
+    });
+  });
+
+  document.querySelectorAll(".slide-text").forEach((element) => {
+    element.addEventListener("input", function () {
+      const index = Number(this.dataset.index);
+
+      if (slides[index]) {
+        slides[index].content = this.innerHTML;
+        autoSave();
+      }
+    });
+  });
+}
+
+// ---------- ESCAPE HTML ----------
+function escapeHTML(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ---------- CHANGE SLIDE ----------
 function showSlide(index) {
+  if (slides.length === 0) return;
 
-    const allSlides =
-        document.querySelectorAll(".slide");
+  if (index < 0) {
+    index = 0;
+  }
 
+  if (index >= slides.length) {
+    index = slides.length - 1;
+  }
 
-    if (allSlides.length === 0) {
-        return;
-    }
+  currentSlide = index;
 
+  renderSlides();
+  updateSlideNumber();
+}
 
-    if (index >= allSlides.length) {
-
-        index = 0;
-
-    }
-
-
-    if (index < 0) {
-
-        index = allSlides.length - 1;
-
-    }
-
-
-    allSlides.forEach(function(slide) {
-
-        slide.classList.remove("active");
-
-    });
-
-
-    allSlides[index].classList.add("active");
-
-
-    currentSlide = index;
-
-
+// ---------- UPDATE NUMBER ----------
+function updateSlideNumber() {
+  if (slideNumber) {
     slideNumber.textContent =
-        (currentSlide + 1) +
-        " / " +
-        allSlides.length;
-
+      `${currentSlide + 1} / ${slides.length}`;
+  }
 }
 
-
-// =====================================
-// NEXT
-// =====================================
-
-function nextSlide() {
-
-    showSlide(
-        currentSlide + 1
-    );
-
-}
-
-
-// =====================================
-// PREVIOUS
-// =====================================
-
-function previousSlide() {
-
-    showSlide(
-        currentSlide - 1
-    );
-
-}
-
-
-// =====================================
-// START PRESENTATION
-// =====================================
-
-async function startPresentation() {
-
-    document.body.classList.add(
-        "presentation-mode"
-    );
-
-
-    try {
-
-        if (
-            !document.fullscreenElement &&
-            document.documentElement.requestFullscreen
-        ) {
-
-            await document.documentElement.requestFullscreen();
-
-        }
-
+// ---------- NEXT ----------
+if (nextBtn) {
+  nextBtn.addEventListener("click", () => {
+    if (currentSlide < slides.length - 1) {
+      showSlide(currentSlide + 1);
     }
-
-    catch (error) {
-
-        console.log(
-            "Fullscreen tidak tersedia:",
-            error
-        );
-
-    }
-
+  });
 }
 
-
-// =====================================
-// STOP PRESENTATION
-// =====================================
-
-async function stopPresentation() {
-
-    document.body.classList.remove(
-        "presentation-mode"
-    );
-
-
-    try {
-
-        if (document.fullscreenElement) {
-
-            await document.exitFullscreen();
-
-        }
-
+// ---------- PREVIOUS ----------
+if (previousBtn) {
+  previousBtn.addEventListener("click", () => {
+    if (currentSlide > 0) {
+      showSlide(currentSlide - 1);
     }
-
-    catch (error) {
-
-        console.log(
-            "Gagal keluar fullscreen:",
-            error
-        );
-
-    }
-
-
-    document.body.classList.remove(
-        "presentation-mode"
-    );
-
+  });
 }
 
-
-// =====================================
-// SAVE PRESENTATION
-// =====================================
-
-function savePresentation() {
-
-    const allSlides =
-        document.querySelectorAll(".slide");
-
-
-    const presentationData = [];
-
-
-    allSlides.forEach(function(slide) {
-
-        presentationData.push(
-            slide.innerHTML
-        );
-
+// ---------- ADD SLIDE ----------
+if (addSlideBtn) {
+  addSlideBtn.addEventListener("click", () => {
+    slides.push({
+      title: `Slide ${slides.length + 1}`,
+      content: "Add your content here."
     });
 
+    currentSlide = slides.length - 1;
 
-    localStorage.setItem(
-        "myPresentation",
-        JSON.stringify(presentationData)
-    );
+    saveLocalPresentation();
+    renderSlides();
+    updateSlideNumber();
 
-
-    saveStatus.textContent =
-        "✓ Presentation disimpan";
-
-
-    setTimeout(function() {
-
-        saveStatus.textContent =
-            "Auto-save aktif";
-
-    }, 2000);
-
+    setStatus("✅ Slide ditambah");
+  });
 }
 
-
-// =====================================
-// LOAD PRESENTATION
-// =====================================
-
-function loadPresentation() {
-
-    const saved =
-        localStorage.getItem(
-            "myPresentation"
-        );
-
-
-    if (!saved) {
-
-        saveStatus.textContent =
-            "Belum ada presentation disimpan";
-
-        return;
-
+// ---------- DELETE SLIDE ----------
+if (deleteSlideBtn) {
+  deleteSlideBtn.addEventListener("click", () => {
+    if (slides.length <= 1) {
+      alert("Mesti ada sekurang-kurangnya 1 slide.");
+      return;
     }
 
+    const confirmed = confirm(
+      "Padam slide ini?"
+    );
+
+    if (!confirmed) return;
+
+    slides.splice(currentSlide, 1);
+
+    if (currentSlide >= slides.length) {
+      currentSlide = slides.length - 1;
+    }
+
+    saveLocalPresentation();
+    renderSlides();
+    updateSlideNumber();
+
+    setStatus("🗑️ Slide dipadam");
+  });
+}
+
+// ---------- ADD IMAGE ----------
+if (addImageBtn && imageInput) {
+  addImageBtn.addEventListener("click", () => {
+    imageInput.click();
+  });
+
+  imageInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      const imageHTML = `
+        <br>
+        <img
+          src="${event.target.result}"
+          style="
+            max-width:100%;
+            max-height:350px;
+            display:block;
+            margin:20px auto;
+            border-radius:12px;
+          "
+        >
+        <br>
+      `;
+
+      slides[currentSlide].content += imageHTML;
+
+      saveLocalPresentation();
+      renderSlides();
+
+      setStatus("🖼️ Gambar ditambah");
+
+      imageInput.value = "";
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---------- SAVE BUTTON ----------
+if (saveBtn) {
+  saveBtn.addEventListener("click", () => {
+    savePresentation();
+  });
+}
+
+// ---------- SAVE PRESENTATION ----------
+async function savePresentation() {
+  saveLocalPresentation();
+
+  if (!supabaseClient) {
+    setStatus("⚠️ Cloud belum disambungkan");
+    return;
+  }
+
+  setStatus("☁️ Menyimpan ke Cloud...");
+
+  const presentationTitle =
+    getPresentationTitle();
+
+  const data = {
+    title: presentationTitle,
+    content: JSON.stringify(slides)
+  };
+
+  try {
+    let result;
+
+    // UPDATE
+    if (currentPresentationId) {
+      result = await supabaseClient
+        .from("works")
+        .update(data)
+        .eq("id", currentPresentationId)
+        .select()
+        .single();
+    }
+
+    // INSERT
+    else {
+      result = await supabaseClient
+        .from("works")
+        .insert(data)
+        .select()
+        .single();
+    }
+
+    if (result.error) {
+      console.error(
+        "Supabase error:",
+        result.error
+      );
+
+      setStatus(
+        "❌ Gagal Cloud: " +
+        result.error.message
+      );
+
+      return;
+    }
+
+    currentPresentationId =
+      result.data.id;
+
+    setStatus("☁️✅ Disimpan ke Cloud");
+
+    loadCloudPresentations();
+
+  } catch (error) {
+    console.error(error);
+
+    setStatus(
+      "❌ Gagal sambung ke Cloud"
+    );
+  }
+}
+
+// ---------- GET TITLE ----------
+function getPresentationTitle() {
+  const firstSlide = slides[0];
+
+  if (
+    firstSlide &&
+    firstSlide.title &&
+    firstSlide.title.trim()
+  ) {
+    return firstSlide.title.trim();
+  }
+
+  return "My Presentation";
+}
+
+// ---------- LOAD CLOUD LIST ----------
+async function loadCloudPresentations() {
+  if (!supabaseClient) return;
+
+  if (!savedPresentations) return;
+
+  savedPresentations.innerHTML =
+    "☁️ Loading...";
+
+  try {
+    const { data, error } =
+      await supabaseClient
+        .from("works")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+    if (error) {
+      console.error(error);
+
+      savedPresentations.innerHTML =
+        "❌ Gagal load Cloud";
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      savedPresentations.innerHTML =
+        "Belum ada presentation disimpan.";
+      return;
+    }
+
+    savedPresentations.innerHTML = "";
+
+    data.forEach((item) => {
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "cloud-presentation";
+
+      row.innerHTML = `
+        <div>
+          <strong>
+            ${escapeHTML(
+              item.title || "Untitled"
+            )}
+          </strong>
+
+          <small>
+            ${formatDate(item.created_at)}
+          </small>
+        </div>
+
+        <div>
+          <button
+            class="open-cloud-btn"
+            data-id="${item.id}">
+            Buka
+          </button>
+
+          <button
+            class="delete-cloud-btn"
+            data-id="${item.id}">
+            Padam
+          </button>
+        </div>
+      `;
+
+      savedPresentations.appendChild(row);
+    });
+
+    document
+      .querySelectorAll(".open-cloud-btn")
+      .forEach((button) => {
+        button.addEventListener(
+          "click",
+          () => {
+            loadCloudPresentation(
+              button.dataset.id
+            );
+          }
+        );
+      });
+
+    document
+      .querySelectorAll(".delete-cloud-btn")
+      .forEach((button) => {
+        button.addEventListener(
+          "click",
+          () => {
+            deleteCloudPresentation(
+              button.dataset.id
+            );
+          }
+        );
+      });
+
+  } catch (error) {
+    console.error(error);
+
+    savedPresentations.innerHTML =
+      "❌ Gagal sambung ke Cloud";
+  }
+}
+
+// ---------- OPEN CLOUD ----------
+async function loadCloudPresentation(id) {
+  if (!supabaseClient) return;
+
+  setStatus("☁️ Membuka presentation...");
+
+  try {
+    const { data, error } =
+      await supabaseClient
+        .from("works")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) {
+      console.error(error);
+
+      setStatus(
+        "❌ Gagal buka presentation"
+      );
+
+      return;
+    }
+
+    currentPresentationId =
+      data.id;
 
     try {
-
-        const presentationData =
-            JSON.parse(saved);
-
-
-        const container =
-            document.getElementById(
-                "slideContainer"
-            );
-
-
-        container.innerHTML = "";
-
-
-        presentationData.forEach(
-            function(slideHTML) {
-
-                const section =
-                    document.createElement(
-                        "section"
-                    );
-
-
-                section.className =
-                    "slide";
-
-
-                section.innerHTML =
-                    slideHTML;
-
-
-                container.appendChild(
-                    section
-                );
-
-            }
-        );
-
-
-        showSlide(0);
-
-
-        saveStatus.textContent =
-            "✓ Presentation dimuat";
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "Gagal load presentation:",
-            error
-        );
-
-    }
-
-}
-
-
-// =====================================
-// AUTO SAVE
-// =====================================
-
-let autoSaveTimer;
-
-
-document.addEventListener(
-    "input",
-    function(event) {
-
-        if (
-            event.target.matches(
-                '[contenteditable="true"]'
-            )
-        ) {
-
-            clearTimeout(
-                autoSaveTimer
-            );
-
-
-            autoSaveTimer =
-                setTimeout(
-                    function() {
-
-                        savePresentation();
-
-                    },
-                    1000
-                );
-
+      slides = JSON.parse(
+        data.content
+      );
+    } catch {
+      slides = [
+        {
+          title:
+            data.title || "Presentation",
+          content:
+            data.content || ""
         }
-
-    }
-);
-
-
-// =====================================
-// ADD IMAGE
-// =====================================
-
-addImageBtn.addEventListener(
-    "click",
-    function() {
-
-        imageInput.click();
-
-    }
-);
-
-
-// =====================================
-// IMAGE SELECTED
-// =====================================
-
-imageInput.addEventListener(
-    "change",
-    function(event) {
-
-        const file =
-            event.target.files[0];
-
-
-        if (!file) {
-            return;
-        }
-
-
-        if (!file.type.startsWith("image/")) {
-
-            alert(
-                "Sila pilih fail gambar."
-            );
-
-            return;
-
-        }
-
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload =
-            function(e) {
-
-                addImageToSlide(
-                    e.target.result
-                );
-
-            };
-
-
-        reader.readAsDataURL(file);
-
-
-        // Reset input
-        imageInput.value = "";
-
-    }
-);
-
-
-// =====================================
-// ADD IMAGE TO CURRENT SLIDE
-// =====================================
-
-function addImageToSlide(imageData) {
-
-    const allSlides =
-        document.querySelectorAll(".slide");
-
-
-    const slide =
-        allSlides[currentSlide];
-
-
-    if (!slide) {
-        return;
+      ];
     }
 
+    currentSlide = 0;
 
-    const wrapper =
-        document.createElement(
-            "div"
-        );
+    saveLocalPresentation();
+    renderSlides();
+    updateSlideNumber();
 
-
-    wrapper.className =
-        "imageWrapper";
-
-
-    const image =
-        document.createElement(
-            "img"
-        );
-
-
-    image.src =
-        imageData;
-
-
-    image.className =
-        "slideImage";
-
-
-    const removeButton =
-        document.createElement(
-            "button"
-        );
-
-
-    removeButton.className =
-        "removeImageBtn";
-
-
-    removeButton.textContent =
-        "×";
-
-
-    removeButton.title =
-        "Buang gambar";
-
-
-    removeButton.addEventListener(
-        "click",
-        function() {
-
-            wrapper.remove();
-
-            savePresentation();
-
-        }
+    setStatus(
+      "☁️✅ Presentation dibuka"
     );
 
+  } catch (error) {
+    console.error(error);
 
-    wrapper.appendChild(image);
-
-    wrapper.appendChild(removeButton);
-
-
-    const content =
-        slide.querySelector(
-            ".slideContent"
-        );
-
-
-    content.appendChild(
-        wrapper
+    setStatus(
+      "❌ Gagal buka Cloud"
     );
-
-
-    savePresentation();
-
+  }
 }
 
+// ---------- DELETE CLOUD ----------
+async function deleteCloudPresentation(id) {
+  if (!supabaseClient) return;
 
-// =====================================
-// ADD NEW SLIDE
-// =====================================
+  const confirmed = confirm(
+    "Padam presentation ini dari Cloud?"
+  );
 
-addSlideBtn.addEventListener(
-    "click",
-    function() {
+  if (!confirmed) return;
 
-        const container =
-            document.getElementById(
-                "slideContainer"
-            );
+  setStatus("☁️ Memadam...");
 
+  try {
+    const { error } =
+      await supabaseClient
+        .from("works")
+        .delete()
+        .eq("id", id);
 
-        const newSlide =
-            document.createElement(
-                "section"
-            );
+    if (error) {
+      console.error(error);
 
+      setStatus(
+        "❌ Gagal padam"
+      );
 
-        newSlide.className =
-            "slide";
-
-
-        newSlide.innerHTML = `
-
-            <div class="slideContent">
-
-                <h1
-                    contenteditable="true"
-                    spellcheck="false"
-                >
-                    Tajuk Baru
-                </h1>
-
-                <p
-                    contenteditable="true"
-                    spellcheck="false"
-                >
-                    Tulis isi presentation di sini...
-                </p>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(
-            newSlide
-        );
-
-
-        showSlide(
-            container.children.length - 1
-        );
-
-
-        savePresentation();
-
+      return;
     }
-);
 
-
-// =====================================
-// DELETE CURRENT SLIDE
-// =====================================
-
-deleteSlideBtn.addEventListener(
-    "click",
-    function() {
-
-        const allSlides =
-            document.querySelectorAll(".slide");
-
-
-        if (allSlides.length <= 1) {
-
-            alert(
-                "Mesti ada sekurang-kurangnya 1 slide."
-            );
-
-            return;
-
-        }
-
-
-        const confirmDelete =
-            confirm(
-                "Padam slide ini?"
-            );
-
-
-        if (!confirmDelete) {
-            return;
-        }
-
-
-        allSlides[currentSlide].remove();
-
-
-        const remainingSlides =
-            document.querySelectorAll(
-                ".slide"
-            );
-
-
-        if (
-            currentSlide >=
-            remainingSlides.length
-        ) {
-
-            currentSlide =
-                remainingSlides.length - 1;
-
-        }
-
-
-        showSlide(
-            currentSlide
-        );
-
-
-        savePresentation();
-
+    if (
+      String(currentPresentationId) ===
+      String(id)
+    ) {
+      currentPresentationId = null;
     }
-);
 
+    setStatus(
+      "🗑️ Presentation dipadam"
+    );
 
-// =====================================
-// BUTTONS
-// =====================================
+    loadCloudPresentations();
 
-presentBtn.addEventListener(
+  } catch (error) {
+    console.error(error);
+
+    setStatus(
+      "❌ Gagal padam Cloud"
+    );
+  }
+}
+
+// ---------- REFRESH CLOUD ----------
+if (refreshCloudBtn) {
+  refreshCloudBtn.addEventListener(
     "click",
-    startPresentation
-);
+    () => {
+      loadCloudPresentations();
+    }
+  );
+}
 
-
-stopBtn.addEventListener(
+// ---------- PRESENT MODE ----------
+if (presentBtn) {
+  presentBtn.addEventListener(
     "click",
-    stopPresentation
-);
+    () => {
+      document.body.classList.add(
+        "presentation-mode"
+      );
 
+      showSlide(currentSlide);
+    }
+  );
+}
 
-nextBtn.addEventListener(
+// ---------- STOP PRESENT ----------
+if (stopBtn) {
+  stopBtn.addEventListener(
     "click",
-    nextSlide
-);
+    () => {
+      document.body.classList.remove(
+        "presentation-mode"
+      );
+    }
+  );
+}
 
-
-previousBtn.addEventListener(
-    "click",
-    previousSlide
-);
-
-
-saveBtn.addEventListener(
-    "click",
-    savePresentation
-);
-
-
-// =====================================
-// KEYBOARD
-// =====================================
-
+// ---------- KEYBOARD ----------
 document.addEventListener(
-    "keydown",
-    function(event) {
+  "keydown",
+  (event) => {
 
-        // Jangan tukar slide ketika
-        // sedang menaip teks
-
-        const editing =
-            document.activeElement &&
-            document.activeElement.isContentEditable;
-
-
-        if (editing) {
-
-            if (event.key === "Escape") {
-
-                document.activeElement.blur();
-
-            }
-
-            return;
-
-        }
-
-
-        if (event.key === "ArrowRight") {
-
-            nextSlide();
-
-        }
-
-
-        if (event.key === "ArrowLeft") {
-
-            previousSlide();
-
-        }
-
-
-        if (event.key === "Escape") {
-
-            stopPresentation();
-
-        }
-
+    if (
+      event.key === "ArrowRight"
+    ) {
+      if (
+        currentSlide <
+        slides.length - 1
+      ) {
+        showSlide(
+          currentSlide + 1
+        );
+      }
     }
+
+    if (
+      event.key === "ArrowLeft"
+    ) {
+      if (currentSlide > 0) {
+        showSlide(
+          currentSlide - 1
+        );
+      }
+    }
+
+    if (event.key === "Escape") {
+      document.body.classList.remove(
+        "presentation-mode"
+      );
+    }
+  }
 );
 
+// ---------- AUTO SAVE ----------
+let autoSaveTimer = null;
 
-// =====================================
-// FULLSCREEN CHANGE
-// =====================================
+function autoSave() {
+  saveLocalPresentation();
 
-document.addEventListener(
-    "fullscreenchange",
-    function() {
+  clearTimeout(autoSaveTimer);
 
-        if (!document.fullscreenElement) {
+  autoSaveTimer = setTimeout(
+    () => {
+      if (supabaseClient) {
+        savePresentation();
+      }
+    },
+    1000
+  );
+}
 
-            document.body.classList.remove(
-                "presentation-mode"
-            );
+// ---------- FORMAT DATE ----------
+function formatDate(dateString) {
+  if (!dateString) return "";
 
-        }
+  const date =
+    new Date(dateString);
 
-    }
-);
+  return date.toLocaleString(
+    "ms-MY"
+  );
+}
 
-
-// =====================================
-// INITIALIZE
-// =====================================
-
-loadPresentation();
-
-showSlide(currentSlide);
+// ---------- START ----------
+initialize();
